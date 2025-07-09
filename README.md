@@ -108,13 +108,6 @@ This is a **native iOS app** with mock data that demonstrates the UI and user ex
 - [ ] Dark mode optimization
 - [ ] iCloud sync for user preferences
 
-## 🎨 Design Philosophy
-
-GitStreak follows iOS design principles:
-- **Clean Interface** - Minimal, focused design that highlights important information
-- **Native Feel** - Uses iOS design patterns and animations
-- **Accessibility** - Built with iOS accessibility features in mind
-- **Performance** - Native SwiftUI for smooth 60fps animations
 
 ## 📱 Supported Platforms
 
@@ -123,20 +116,6 @@ GitStreak follows iOS design principles:
 - iPad (optimized for tablet experience)
 - iOS Simulator
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-### Development Setup
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 🙏 Acknowledgments
 
