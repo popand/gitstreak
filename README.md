@@ -1,30 +1,149 @@
-# Gamified GitHub Tracker
+# GitStreak - iOS
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+GitHub Tracker, native iOS app that gamifies your GitHub activity with streaks, achievements, and progress tracking. Built with SwiftUI for a native iOS experience.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/popands-projects/v0-gamified-git-hub-tracker)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/TrXHgROIdSI)
+## Screenshots
 
-## Overview
+<p align="center">
+  <img src="screenshots/home.png" alt="Home Screen" width="300"/>
+</p>
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
 
-## Deployment
 
-Your project is live at:
+## ✨ Features
 
-**[https://vercel.com/popands-projects/v0-gamified-git-hub-tracker](https://vercel.com/popands-projects/v0-gamified-git-hub-tracker)**
+### 🔥 Core Features
+- **Daily Streak Tracking** - Monitor your consecutive days of GitHub activity
+- **Level System** - Progress through levels based on your coding activity
+- **XP & Progress** - Earn experience points for each commit and contribution
+- **Weekly Activity Chart** - Visual representation of your daily coding activity
+- **Recent Commits** - See your latest GitHub activity at a glance
+- **Achievements System** - Unlock badges for reaching milestones
 
-## Build your app
+### 📱 iOS-Specific Features
+- **Native SwiftUI Interface** - Smooth, responsive iOS design
+- **Tab-Based Navigation** - Intuitive iOS navigation pattern
+- **Dynamic UI** - Adapts to different screen sizes and orientations
+- **iOS Design Language** - Follows Apple's Human Interface Guidelines
 
-Continue building your app on:
+## 🛠 Tech Stack
 
-**[https://v0.dev/chat/projects/TrXHgROIdSI](https://v0.dev/chat/projects/TrXHgROIdSI)**
+- **Framework:** SwiftUI
+- **Language:** Swift
+- **Platform:** iOS 14.0+
+- **Architecture:** MVVM pattern
+- **Data:** Mock data structure (ready for real API integration)
 
-## How It Works
+## 📁 Project Structure
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+```
+GitStreak/
+├── GitStreakApp.swift          # App entry point
+├── ContentView.swift           # Main container view with tab navigation
+├── Models/
+│   └── GitStreakData.swift     # Data models and mock data
+└── Views/
+    ├── StreakCardView.swift    # Daily streak display card
+    ├── LevelProgressView.swift # Level and XP progress
+    ├── WeeklyActivityView.swift # Weekly activity chart
+    ├── RecentActivityView.swift # Recent commits list
+    ├── AchievementsView.swift  # Achievements display
+    └── TabBarView.swift        # Custom tab bar component
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Xcode 14.0 or later
+- iOS 14.0+ device or simulator
+- macOS Big Sur or later
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd gitstreak
+   ```
+
+2. **Open in Xcode**
+   ```bash
+   open GitStreak.xcodeproj
+   ```
+
+3. **Select your target**
+   - Choose an iOS Simulator (e.g., iPhone 15 Pro) from the device dropdown
+   - Or connect your physical iOS device
+
+4. **Build and run**
+   - Press `⌘+R` or click the play button
+   - The app will build and launch on your selected device/simulator
+
+### Troubleshooting
+
+**"Build only device cannot be used" error:**
+- Make sure you've selected an iOS Simulator, not a "Build Only" device
+- Go to Window → Devices and Simulators to manage available simulators
+
+## 🎯 Current Status
+
+This is a **native iOS app** with mock data that demonstrates the UI and user experience. 
+
+### ✅ Completed Features
+- [x] Native SwiftUI interface
+- [x] Tab-based navigation (Home, Awards, Stats, Social)
+- [x] Streak tracking display
+- [x] Level progress visualization
+- [x] Weekly activity chart
+- [x] Recent activity feed
+- [x] Achievements system UI
+- [x] Responsive design for all iOS screen sizes
+
+### 🔄 Future Enhancements
+- [ ] GitHub API integration for real data
+- [ ] Push notifications for streak reminders
+- [ ] Haptic feedback for interactions
+- [ ] Widget support for iOS home screen
+- [ ] Apple Watch companion app
+- [ ] Dark mode optimization
+- [ ] iCloud sync for user preferences
+
+## 🎨 Design Philosophy
+
+GitStreak follows iOS design principles:
+- **Clean Interface** - Minimal, focused design that highlights important information
+- **Native Feel** - Uses iOS design patterns and animations
+- **Accessibility** - Built with iOS accessibility features in mind
+- **Performance** - Native SwiftUI for smooth 60fps animations
+
+## 📱 Supported Platforms
+
+- iOS 14.0+
+- iPhone (all sizes)
+- iPad (optimized for tablet experience)
+- iOS Simulator
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+### Development Setup
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- Inspired by GitHub's contribution graph
+- Built with Apple's SwiftUI framework
+- Icons from SF Symbols
+
+---
+
+**Built with ❤️ using SwiftUI**

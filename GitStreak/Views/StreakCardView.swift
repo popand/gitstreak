@@ -24,6 +24,7 @@ struct StreakCardView: View {
                 .font(.caption)
                 .foregroundColor(.white.opacity(0.7))
         }
+        .frame(maxWidth: .infinity)
         .padding(24)
         .background(
             LinearGradient(
