@@ -1,6 +1,6 @@
 # GitStreak - iOS
 
-GitHub Tracker, native iOS app that gamifies your GitHub activity with streaks, achievements, and progress tracking. Built with SwiftUI for a native iOS experience.
+A native iOS app that gamifies your GitHub activity with real-time streak tracking, achievements, and progress visualization. Connect your GitHub account to track your coding streaks and level up your development journey.
 
 ## Screenshots
 
@@ -13,50 +13,57 @@ GitHub Tracker, native iOS app that gamifies your GitHub activity with streaks, 
 ## ✨ Features
 
 ### 🔥 Core Features
-- **Daily Streak Tracking** - Monitor your consecutive days of GitHub activity
+- **Real GitHub Integration** - Connect with Personal Access Token for live data
+- **Daily Streak Tracking** - Monitor your consecutive days of GitHub commits
 - **Level System** - Progress through levels based on your coding activity
 - **XP & Progress** - Earn experience points for each commit and contribution
-- **Weekly Activity Chart** - Visual representation of your daily coding activity
-- **Recent Commits** - See your latest GitHub activity at a glance
-- **Achievements System** - Unlock badges for reaching milestones
+- **Weekly Activity Chart** - Visual representation of your current week's activity
+- **Recent Commits** - See your latest GitHub commits in real-time
+- **Achievements System** - Unlock badges for reaching coding milestones
+- **Secure Token Storage** - GitHub tokens stored securely in iOS Keychain
 
 ### 📱 iOS-Specific Features
 - **Native SwiftUI Interface** - Smooth, responsive iOS design
-- **Tab-Based Navigation** - Intuitive iOS navigation pattern
+- **Tab-Based Navigation** - Intuitive iOS navigation pattern (Home, Awards, Stats, Social)
 - **Dynamic UI** - Adapts to different screen sizes and orientations
 - **iOS Design Language** - Follows Apple's Human Interface Guidelines
+- **Secure Authentication** - GitHub tokens stored in iOS Keychain for security
+- **Settings Integration** - Easy GitHub account connection and management
 
 ## 🛠 Tech Stack
 
 - **Framework:** SwiftUI
 - **Language:** Swift
-- **Platform:** iOS 14.0+
-- **Architecture:** MVVM pattern
-- **Data:** Mock data structure (ready for real API integration)
+- **Platform:** iOS 17.5+
+- **Architecture:** MVVM pattern with ObservableObject
+- **API Integration:** GitHub REST API v3
+- **Security:** iOS Keychain for secure token storage
+- **Data Handling:** Real-time GitHub data with fallback to mock data
 
 ## 📁 Project Structure
 
 ```
 GitStreak/
-├── GitStreakApp.swift          # App entry point
-├── ContentView.swift           # Main container view with tab navigation
+├── GitStreakApp.swift          # App entry point with @main
+├── ContentView.swift           # Main container with tab navigation, view routing, and SettingsView
 ├── Models/
-│   └── GitStreakData.swift     # Data models and mock data
+│   └── GitStreakData.swift     # Data models, GitHubService, and ObservableObject classes
 └── Views/
-    ├── StreakCardView.swift    # Daily streak display card
-    ├── LevelProgressView.swift # Level and XP progress
-    ├── WeeklyActivityView.swift # Weekly activity chart
+    ├── StreakCardView.swift    # Current streak display with gradient background and loading state
+    ├── LevelProgressView.swift # Level and XP progress visualization
+    ├── WeeklyActivityView.swift # Weekly commit activity chart
     ├── RecentActivityView.swift # Recent commits list
-    ├── AchievementsView.swift  # Achievements display
-    └── TabBarView.swift        # Custom tab bar component
+    ├── AchievementsView.swift  # Achievement badges display
+    └── TabBarView.swift        # Custom tab bar with 4 tabs (Home, Awards, Stats, Social)
 ```
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Xcode 14.0 or later
-- iOS 14.0+ device or simulator
+- iOS 17.5+ device or simulator
 - macOS Big Sur or later
+- GitHub Personal Access Token (for real data integration)
 
 ### Installation
 
@@ -79,6 +86,12 @@ GitStreak/
    - Press `⌘+R` or click the play button
    - The app will build and launch on your selected device/simulator
 
+5. **Connect your GitHub account (optional)**
+   - Tap the gear icon in the top right to open Settings
+   - Generate a Personal Access Token at [GitHub Settings](https://github.com/settings/tokens)
+   - Grant `repo` and `user` scopes to the token
+   - Paste your token in the app to see real GitHub data
+
 ### Troubleshooting
 
 **"Build only device cannot be used" error:**
@@ -87,34 +100,47 @@ GitStreak/
 
 ## 🎯 Current Status
 
-This is a **native iOS app** with mock data that demonstrates the UI and user experience. 
+This is a **fully functional native iOS app** with real GitHub integration and secure authentication.
 
 ### ✅ Completed Features
-- [x] Native SwiftUI interface
-- [x] Tab-based navigation (Home, Awards, Stats, Social)
-- [x] Streak tracking display
-- [x] Level progress visualization
-- [x] Weekly activity chart
-- [x] Recent activity feed
-- [x] Achievements system UI
-- [x] Responsive design for all iOS screen sizes
+- [x] **GitHub Integration** - Full GitHub API integration with Personal Access Token authentication
+- [x] **Secure Token Storage** - GitHub tokens stored securely in iOS Keychain
+- [x] **Real-time Data** - Live streak calculation, commit tracking, and activity monitoring
+- [x] **Weekly Activity Display** - Current week commit visualization (Monday-Sunday)
+- [x] **Settings & Authentication** - Complete GitHub account connection flow
+- [x] **Native SwiftUI interface** - Smooth, responsive iOS design
+- [x] **Tab-based navigation** - Home (fully functional), Awards, Stats, Social tabs
+- [x] **Streak tracking display** - Real GitHub commit streak calculation
+- [x] **Level progress visualization** - XP and level system based on GitHub activity
+- [x] **Recent activity feed** - Latest GitHub commits with timestamps
+- [x] **Achievements system UI** - Achievement badges with unlock conditions
+- [x] **Responsive design** - Optimized for all iOS screen sizes
+- [x] **Error handling & fallback** - Graceful fallback to mock data when not authenticated
 
 ### 🔄 Future Enhancements
-- [ ] GitHub API integration for real data
-- [ ] Push notifications for streak reminders
-- [ ] Haptic feedback for interactions
-- [ ] Widget support for iOS home screen
-- [ ] Apple Watch companion app
-- [ ] Dark mode optimization
-- [ ] iCloud sync for user preferences
+- [ ] **Enhanced Stats Tab** - Detailed analytics and contribution graphs
+- [ ] **Awards Tab Completion** - Interactive achievement showcase
+- [ ] **Social Features** - Share streaks and compare with friends
+- [ ] **Push Notifications** - Streak reminders and goal notifications
+- [ ] **Haptic Feedback** - Enhanced interaction feedback
+- [ ] **Widget Support** - iOS home screen streak widget
+- [ ] **Dark Mode Optimization** - Enhanced dark theme experience
+- [ ] **Advanced GitHub Features** - Pull requests, issues, and contribution types
 
 
 ## 📱 Supported Platforms
 
-- iOS 14.0+
-- iPhone (all sizes)
+- iOS 17.5+
+- iPhone (all sizes, from iPhone SE to iPhone 15 Pro Max)
 - iPad (optimized for tablet experience)
 - iOS Simulator
+
+## 🔐 Security & Privacy
+
+- **Secure Token Storage**: GitHub Personal Access Tokens are stored securely in iOS Keychain
+- **No Data Collection**: Your GitHub data stays on your device
+- **Token Validation**: Comprehensive token format validation before authentication
+- **Error Handling**: Graceful handling of authentication failures and network issues
 
 
 ## 🙏 Acknowledgments
@@ -122,7 +148,14 @@ This is a **native iOS app** with mock data that demonstrates the UI and user ex
 - Inspired by GitHub's contribution graph
 - Built with Apple's SwiftUI framework
 - Icons from SF Symbols
+- GitHub REST API for real-time data
+
+## 📝 Recent Updates
+
+- **v1.2** - Fixed weekly activity display not showing commits
+- **v1.1** - Added GitHub API integration with secure authentication
+- **v1.0** - Initial release with SwiftUI interface and mock data
 
 ---
 
-**Built with ❤️ using SwiftUI**
+**Built with ❤️ using SwiftUI and GitHub API**
