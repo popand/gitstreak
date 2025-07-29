@@ -28,6 +28,7 @@ struct ContentView: View {
 
 struct HomeView: View {
     @ObservedObject var dataModel: GitStreakDataModel
+    @State private var showSettings = false
     
     var body: some View {
         ScrollView {
@@ -35,11 +36,11 @@ struct HomeView: View {
                 // Header
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Good morning!")
+                        Text(getGreeting())
                             .font(.title2)
                             .fontWeight(.bold)
                         
-                        Text("Ready to code today?")
+                        Text(getSubtitle())
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -53,7 +54,9 @@ struct HomeView: View {
                                 .foregroundColor(.gray)
                         }
                         
-                        Button(action: {}) {
+                        Button(action: {
+                            showSettings = true
+                        }) {
                             Image(systemName: "gearshape")
                                 .font(.title3)
                                 .foregroundColor(.gray)
@@ -66,7 +69,8 @@ struct HomeView: View {
                 // Current Streak
                 StreakCardView(
                     streak: dataModel.currentStreak,
-                    bestStreak: dataModel.bestStreak
+                    bestStreak: dataModel.bestStreak,
+                    isLoading: dataModel.isLoading
                 )
                 .padding(.horizontal, 24)
                 
@@ -164,6 +168,31 @@ struct HomeView: View {
                 .padding(.bottom, 24)
             }
         }
+        .sheet(isPresented: $showSettings) {
+            SettingsView(dataModel: dataModel)
+        }
+    }
+    
+    private func getGreeting() -> String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        switch hour {
+        case 5..<12: return "Good morning!"
+        case 12..<17: return "Good afternoon!"
+        case 17..<22: return "Good evening!"
+        default: return "Good night!"
+        }
+    }
+    
+    private func getSubtitle() -> String {
+        let gitHubService = GitHubService.shared
+        if gitHubService.isAuthenticated {
+            if let username = gitHubService.username {
+                return "Welcome back, @\(username)!"
+            }
+            return "Ready to code today?"
+        } else {
+            return "Connect your GitHub to get started"
+        }
     }
 }
 
@@ -226,6 +255,182 @@ struct SocialView: View {
                 .foregroundColor(.secondary)
             
             Spacer()
+        }
+    }
+}
+
+struct SettingsView: View {
+    @ObservedObject var gitHubService = GitHubService.shared
+    @ObservedObject var dataModel: GitStreakDataModel
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var tokenInput = ""
+    @State private var isAuthenticating = false
+    @State private var showError = false
+    @State private var errorMessage = ""
+    
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 24) {
+                if gitHubService.isAuthenticated {
+                    authenticatedView
+                } else {
+                    authenticationView
+                }
+                
+                Spacer()
+            }
+            .padding(24)
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+        .alert("Authentication Error", isPresented: $showError) {
+            Button("OK") { }
+        } message: {
+            Text(errorMessage)
+        }
+    }
+    
+    private var authenticatedView: some View {
+        VStack(spacing: 24) {
+            VStack(spacing: 16) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 60))
+                    .foregroundColor(.green)
+                
+                Text("Connected to GitHub")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                
+                if let username = gitHubService.username {
+                    Text("@\(username)")
+                        .font(.headline)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding(.vertical, 24)
+            
+            VStack(spacing: 16) {
+                Button("Refresh Data") {
+                    dataModel.refreshData()
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(12)
+                .fontWeight(.semibold)
+                
+                Button("Disconnect Account") {
+                    gitHubService.logout()
+                    dataModel.refreshData()
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(Color.red.opacity(0.1))
+                .foregroundColor(.red)
+                .cornerRadius(12)
+                .fontWeight(.semibold)
+            }
+        }
+    }
+    
+    private var authenticationView: some View {
+        VStack(spacing: 24) {
+            VStack(spacing: 16) {
+                Image(systemName: "person.crop.circle.badge.plus")
+                    .font(.system(size: 60))
+                    .foregroundColor(.blue)
+                
+                Text("Connect GitHub Account")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                
+                Text("Track your real GitHub activity and streaks")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.vertical, 24)
+            
+            VStack(alignment: .leading, spacing: 12) {
+                Text("GitHub Personal Access Token")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                
+                Text("1. Go to GitHub Settings → Developer Settings → Personal Access Tokens")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                Text("2. Generate a new token with 'repo' and 'user' scopes")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                Text("3. Paste your token below:")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                SecureField("ghp_xxxxxxxxxxxxxxxxxxxx", text: $tokenInput)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .font(.system(.body, design: .monospaced))
+                
+                Button("Generate Token on GitHub") {
+                    if let url = URL(string: "https://github.com/settings/tokens/new?scopes=repo,user&description=GitStreak%20App") {
+                        UIApplication.shared.open(url)
+                    }
+                }
+                .font(.caption)
+                .foregroundColor(.blue)
+            }
+            
+            Button(action: authenticateWithToken) {
+                HStack {
+                    if isAuthenticating {
+                        ProgressView()
+                            .scaleEffect(0.8)
+                            .foregroundColor(.white)
+                    }
+                    
+                    Text(isAuthenticating ? "Connecting..." : "Connect Account")
+                        .fontWeight(.semibold)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(tokenInput.isEmpty ? Color.gray : Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(12)
+            .disabled(tokenInput.isEmpty || isAuthenticating)
+        }
+    }
+    
+    private func authenticateWithToken() {
+        guard !tokenInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+        
+        isAuthenticating = true
+        
+        Task {
+            do {
+                try await gitHubService.authenticate(token: tokenInput.trimmingCharacters(in: .whitespacesAndNewlines))
+                await MainActor.run {
+                    dataModel.refreshData()
+                    tokenInput = ""
+                    isAuthenticating = false
+                }
+            } catch {
+                await MainActor.run {
+                    errorMessage = error.localizedDescription
+                    showError = true
+                    isAuthenticating = false
+                }
+            }
         }
     }
 }
