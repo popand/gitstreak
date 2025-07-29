@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,8 +20,17 @@
 		1A2B3C4D5E6F7G8H9I0J1K35 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K36 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C99331872E3955BB00D19848 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A2B3C4D5E6F7G8H9I0J1K49 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1A2B3C4D5E6F7G8H9I0J1K45;
+			remoteInfo = GitStreak;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		1A2B3C4D5E6F7G8H9I0J1K37 /* GitStreak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitStreak.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2B3C4D5E6F7G8H9I0J1K2M /* GitStreakApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitStreakApp.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K2O /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K2Q /* GitStreakData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitStreakData.swift; sourceTree = "<group>"; };
@@ -33,10 +42,23 @@
 		1A2B3C4D5E6F7G8H9I0J1K32 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K34 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K36 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		1A2B3C4D5E6F7G8H9I0J1K37 /* GitStreak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitStreak.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C99331832E3955BB00D19848 /* GitStreakTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GitStreakTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		C99331842E3955BB00D19848 /* GitStreakTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GitStreakTests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		1A2B3C4D5E6F7G8H9I0J1K38 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C99331802E3955BB00D19848 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -50,16 +72,9 @@
 			isa = PBXGroup;
 			children = (
 				1A2B3C4D5E6F7G8H9I0J1K40 /* GitStreak */,
+				C99331842E3955BB00D19848 /* GitStreakTests */,
 				1A2B3C4D5E6F7G8H9I0J1K41 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		1A2B3C4D5E6F7G8H9I0J1K41 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				1A2B3C4D5E6F7G8H9I0J1K37 /* GitStreak.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		1A2B3C4D5E6F7G8H9I0J1K40 /* GitStreak */ = {
@@ -73,6 +88,15 @@
 				1A2B3C4D5E6F7G8H9I0J1K44 /* Preview Content */,
 			);
 			path = GitStreak;
+			sourceTree = "<group>";
+		};
+		1A2B3C4D5E6F7G8H9I0J1K41 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F7G8H9I0J1K37 /* GitStreak.app */,
+				C99331832E3955BB00D19848 /* GitStreakTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		1A2B3C4D5E6F7G8H9I0J1K42 /* Models */ = {
@@ -124,6 +148,29 @@
 			productReference = 1A2B3C4D5E6F7G8H9I0J1K37 /* GitStreak.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C99331822E3955BB00D19848 /* GitStreakTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C993318B2E3955BB00D19848 /* Build configuration list for PBXNativeTarget "GitStreakTests" */;
+			buildPhases = (
+				C993317F2E3955BB00D19848 /* Sources */,
+				C99331802E3955BB00D19848 /* Frameworks */,
+				C99331812E3955BB00D19848 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C99331882E3955BB00D19848 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				C99331842E3955BB00D19848 /* GitStreakTests */,
+			);
+			name = GitStreakTests;
+			packageProductDependencies = (
+			);
+			productName = GitStreakTests;
+			productReference = C99331832E3955BB00D19848 /* GitStreakTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -131,11 +178,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1540;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					1A2B3C4D5E6F7G8H9I0J1K45 = {
 						CreatedOnToolsVersion = 15.4;
+					};
+					C99331822E3955BB00D19848 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 1A2B3C4D5E6F7G8H9I0J1K45;
 					};
 				};
 			};
@@ -153,6 +204,7 @@
 			projectRoot = "";
 			targets = (
 				1A2B3C4D5E6F7G8H9I0J1K45 /* GitStreak */,
+				C99331822E3955BB00D19848 /* GitStreakTests */,
 			);
 		};
 /* End PBXProject section */
@@ -164,6 +216,13 @@
 			files = (
 				1A2B3C4D5E6F7G8H9I0J1K35 /* Preview Assets.xcassets in Resources */,
 				1A2B3C4D5E6F7G8H9I0J1K33 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C99331812E3955BB00D19848 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,7 +245,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C993317F2E3955BB00D19848 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C99331882E3955BB00D19848 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1A2B3C4D5E6F7G8H9I0J1K45 /* GitStreak */;
+			targetProxy = C99331872E3955BB00D19848 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1A2B3C4D5E6F7G8H9I0J1K51 /* Debug */ = {
@@ -364,9 +438,56 @@
 			};
 			name = Release;
 		};
+		C99331892E3955BB00D19848 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 389Y5DY6GV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gitstreak.app.tests.GitStreakTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GitStreak.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GitStreak";
+			};
+			name = Debug;
+		};
+		C993318A2E3955BB00D19848 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 389Y5DY6GV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gitstreak.app.tests.GitStreakTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GitStreak.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GitStreak";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1A2B3C4D5E6F7G8H9I0J1K46 /* Build configuration list for PBXNativeTarget "GitStreak" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A2B3C4D5E6F7G8H9I0J1K53 /* Debug */,
+				1A2B3C4D5E6F7G8H9I0J1K54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1A2B3C4D5E6F7G8H9I0J1K50 /* Build configuration list for PBXProject "GitStreak" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -376,11 +497,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1A2B3C4D5E6F7G8H9I0J1K46 /* Build configuration list for PBXNativeTarget "GitStreak" */ = {
+		C993318B2E3955BB00D19848 /* Build configuration list for PBXNativeTarget "GitStreakTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1A2B3C4D5E6F7G8H9I0J1K53 /* Debug */,
-				1A2B3C4D5E6F7G8H9I0J1K54 /* Release */,
+				C99331892E3955BB00D19848 /* Debug */,
+				C993318A2E3955BB00D19848 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
