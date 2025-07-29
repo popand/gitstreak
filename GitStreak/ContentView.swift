@@ -381,6 +381,13 @@ struct SettingsView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .font(.system(.body, design: .monospaced))
                 
+                if !tokenInput.isEmpty && !isValidGitHubToken(tokenInput) {
+                    Text("Invalid token format. Must start with 'ghp_' (40+ chars) or 'github_pat_' (50+ chars)")
+                        .font(.caption)
+                        .foregroundColor(.red)
+                        .multilineTextAlignment(.leading)
+                }
+                
                 Button("Generate Token on GitHub") {
                     if let url = URL(string: "https://github.com/settings/tokens/new?scopes=repo,user&description=GitStreak%20App") {
                         UIApplication.shared.open(url)
@@ -404,21 +411,22 @@ struct SettingsView: View {
             }
             .frame(maxWidth: .infinity)
             .frame(height: 50)
-            .background(tokenInput.isEmpty ? Color.gray : Color.blue)
+            .background(buttonBackgroundColor)
             .foregroundColor(.white)
             .cornerRadius(12)
-            .disabled(tokenInput.isEmpty || isAuthenticating)
+            .disabled(tokenInput.isEmpty || isAuthenticating || !isValidGitHubToken(tokenInput))
         }
     }
     
     private func authenticateWithToken() {
-        guard !tokenInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+        let trimmedToken = tokenInput.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedToken.isEmpty && isValidGitHubToken(trimmedToken) else { return }
         
         isAuthenticating = true
         
         Task {
             do {
-                try await gitHubService.authenticate(token: tokenInput.trimmingCharacters(in: .whitespacesAndNewlines))
+                try await gitHubService.authenticate(token: trimmedToken)
                 await MainActor.run {
                     dataModel.refreshData()
                     tokenInput = ""
@@ -431,6 +439,26 @@ struct SettingsView: View {
                     isAuthenticating = false
                 }
             }
+        }
+    }
+    
+    private func isValidGitHubToken(_ token: String) -> Bool {
+        let trimmedToken = token.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Check if token has the correct prefix and minimum length
+        // GitHub Personal Access Tokens (classic) start with "ghp_" and are 40+ characters
+        // GitHub Fine-grained Personal Access Tokens start with "github_pat_" and are longer
+        return (trimmedToken.hasPrefix("ghp_") && trimmedToken.count >= 40) ||
+               (trimmedToken.hasPrefix("github_pat_") && trimmedToken.count >= 50)
+    }
+    
+    private var buttonBackgroundColor: Color {
+        if tokenInput.isEmpty {
+            return Color.gray
+        } else if isValidGitHubToken(tokenInput) {
+            return Color.blue
+        } else {
+            return Color.red.opacity(0.6)
         }
     }
 }

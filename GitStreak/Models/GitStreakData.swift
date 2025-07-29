@@ -97,6 +97,11 @@ class GitHubService: ObservableObject {
     }
     
     func authenticate(token: String) async throws {
+        // Validate token format before making API calls
+        guard isValidGitHubToken(token) else {
+            throw GitHubError.invalidToken
+        }
+        
         let user = try await fetchUser(token: token)
         
         await MainActor.run {
@@ -311,6 +316,16 @@ class GitHubService: ObservableObject {
             return "\(days)d ago"
         }
     }
+    
+    private func isValidGitHubToken(_ token: String) -> Bool {
+        let trimmedToken = token.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Check if token has the correct prefix and minimum length
+        // GitHub Personal Access Tokens (classic) start with "ghp_" and are 40+ characters
+        // GitHub Fine-grained Personal Access Tokens start with "github_pat_" and are longer
+        return (trimmedToken.hasPrefix("ghp_") && trimmedToken.count >= 40) ||
+               (trimmedToken.hasPrefix("github_pat_") && trimmedToken.count >= 50)
+    }
 }
 
 // MARK: - GitHub Models
@@ -360,6 +375,7 @@ enum GitHubError: Error, LocalizedError {
     case invalidResponse
     case unauthorized
     case notAuthenticated
+    case invalidToken
     case requestFailed(Int)
     
     var errorDescription: String? {
@@ -372,6 +388,8 @@ enum GitHubError: Error, LocalizedError {
             return "Invalid GitHub token"
         case .notAuthenticated:
             return "Not authenticated"
+        case .invalidToken:
+            return "Invalid token format. Please use a valid GitHub Personal Access Token (starts with 'ghp_' or 'github_pat_')"
         case .requestFailed(let code):
             return "Request failed with code \(code)"
         }
