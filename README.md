@@ -124,9 +124,7 @@ This is a **fully functional native iOS app** with real GitHub integration and s
 - [ ] **Push Notifications** - Streak reminders and goal notifications
 - [ ] **Haptic Feedback** - Enhanced interaction feedback
 - [ ] **Widget Support** - iOS home screen streak widget
-- [ ] **Apple Watch App** - Companion watchOS app for streak tracking
 - [ ] **Dark Mode Optimization** - Enhanced dark theme experience
-- [ ] **iCloud Sync** - Sync user preferences across devices
 - [ ] **Advanced GitHub Features** - Pull requests, issues, and contribution types
 
 
