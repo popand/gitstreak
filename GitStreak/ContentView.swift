@@ -129,42 +129,6 @@ struct HomeView: View {
                     AchievementsView(achievements: dataModel.achievements)
                         .padding(.horizontal, 24)
                 }
-                
-                // Quick Actions
-                HStack(spacing: 16) {
-                    Button(action: {}) {
-                        VStack(spacing: 8) {
-                            Image(systemName: "plus")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                            
-                            Text("Log Commit")
-                                .font(.caption)
-                                .foregroundColor(.white)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 64)
-                        .background(Color.blue)
-                        .cornerRadius(16)
-                    }
-                    
-                    Button(action: {}) {
-                        VStack(spacing: 8) {
-                            Image(systemName: "target")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                            
-                            Text("Set Goal")
-                                .font(.caption)
-                                .foregroundColor(.white)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 64)
-                        .background(Color.green)
-                        .cornerRadius(16)
-                    }
-                }
-                .padding(.horizontal, 24)
                 .padding(.bottom, 24)
             }
         }
