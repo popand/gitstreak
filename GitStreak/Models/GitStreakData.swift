@@ -244,7 +244,10 @@ class GitHubService: ObservableObject {
         // Count consecutive days with commits going backwards from current day
         while commitDays.contains(currentDay) {
             streak += 1
-            currentDay = calendar.date(byAdding: .day, value: -1, to: currentDay) ?? break
+            guard let nextDay = calendar.date(byAdding: .day, value: -1, to: currentDay) else {
+                break
+            }
+            currentDay = nextDay
         }
         
         return streak
