@@ -1,5 +1,75 @@
 import Foundation
 import SwiftUI
+import Security
+
+// MARK: - Keychain Helper
+class KeychainHelper {
+    static let shared = KeychainHelper()
+    
+    private init() {}
+    
+    func save(_ data: Data, service: String, account: String) -> Bool {
+        let query = [
+            kSecClass as String: kSecClassGenericPassword as String,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecValueData as String: data
+        ] as [String: Any]
+        
+        SecItemDelete(query as CFDictionary)
+        
+        let status = SecItemAdd(query as CFDictionary, nil)
+        return status == errSecSuccess
+    }
+    
+    func read(service: String, account: String) -> Data? {
+        let query = [
+            kSecClass as String: kSecClassGenericPassword as String,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecReturnData as String: kCFBooleanTrue!,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ] as [String: Any]
+        
+        var dataTypeRef: AnyObject? = nil
+        let status: OSStatus = SecItemCopyMatching(query as CFDictionary, &dataTypeRef)
+        
+        if status == errSecSuccess {
+            return dataTypeRef as? Data
+        } else {
+            return nil
+        }
+    }
+    
+    func delete(service: String, account: String) -> Bool {
+        let query = [
+            kSecClass as String: kSecClassGenericPassword as String,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account
+        ] as [String: Any]
+        
+        let status = SecItemDelete(query as CFDictionary)
+        return status == errSecSuccess || status == errSecItemNotFound
+    }
+}
+
+extension KeychainHelper {
+    private static let service = "com.gitstreak.app"
+    
+    func saveToken(_ token: String, forKey key: String) -> Bool {
+        guard let data = token.data(using: .utf8) else { return false }
+        return save(data, service: KeychainHelper.service, account: key)
+    }
+    
+    func getToken(forKey key: String) -> String? {
+        guard let data = read(service: KeychainHelper.service, account: key) else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+    
+    func deleteToken(forKey key: String) -> Bool {
+        return delete(service: KeychainHelper.service, account: key)
+    }
+}
 
 // MARK: - GitHub Service
 class GitHubService: ObservableObject {
@@ -18,8 +88,8 @@ class GitHubService: ObservableObject {
     }
     
     private func loadStoredCredentials() {
-        if let token = UserDefaults.standard.string(forKey: tokenKey),
-           let username = UserDefaults.standard.string(forKey: usernameKey) {
+        if let token = KeychainHelper.shared.getToken(forKey: tokenKey),
+           let username = KeychainHelper.shared.getToken(forKey: usernameKey) {
             self.accessToken = token
             self.username = username
             self.isAuthenticated = true
@@ -34,8 +104,8 @@ class GitHubService: ObservableObject {
             self.username = user.login
             self.isAuthenticated = true
             
-            UserDefaults.standard.set(token, forKey: tokenKey)
-            UserDefaults.standard.set(user.login, forKey: usernameKey)
+            _ = KeychainHelper.shared.saveToken(token, forKey: tokenKey)
+            _ = KeychainHelper.shared.saveToken(user.login, forKey: usernameKey)
         }
     }
     
@@ -44,8 +114,8 @@ class GitHubService: ObservableObject {
         username = nil
         isAuthenticated = false
         
-        UserDefaults.standard.removeObject(forKey: tokenKey)
-        UserDefaults.standard.removeObject(forKey: usernameKey)
+        _ = KeychainHelper.shared.deleteToken(forKey: tokenKey)
+        _ = KeychainHelper.shared.deleteToken(forKey: usernameKey)
     }
     
     private func fetchUser(token: String) async throws -> GitHubUser {
