@@ -174,7 +174,7 @@ class GitHubService: ObservableObject {
     }
     
     func fetchContributionStats() async throws -> ContributionStats {
-        guard let username = username else {
+        guard username != nil else {
             throw GitHubError.notAuthenticated
         }
         
@@ -182,15 +182,37 @@ class GitHubService: ObservableObject {
         
         var weeklyCommits: [String: Int] = [:]
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
         
         let dayFormatter = DateFormatter()
         dayFormatter.dateFormat = "EEE"
         
+        let calendar = Calendar.current
+        let today = Date()
+        
+        // Get the start of the current week (Monday)
+        let weekday = calendar.component(.weekday, from: today)
+        let daysFromMonday = (weekday == 1) ? 6 : weekday - 2 // Sunday = 1, so Sunday needs 6 days back to Monday
+        guard let startOfWeek = calendar.date(byAdding: .day, value: -daysFromMonday, to: calendar.startOfDay(for: today)) else {
+            throw GitHubError.invalidResponse
+        }
+        
+        // Get the end of the current week (Sunday)
+        guard let endOfWeek = calendar.date(byAdding: .day, value: 6, to: startOfWeek) else {
+            throw GitHubError.invalidResponse
+        }
+        
+        // Filter commits to only include those from the current week
         for commit in commits {
-            if let date = dateFormatter.date(from: commit.commit.committer.date) {
-                let dayKey = dayFormatter.string(from: date)
-                weeklyCommits[dayKey, default: 0] += 1
+            if let commitDate = dateFormatter.date(from: commit.commit.committer.date) {
+                let commitDayStart = calendar.startOfDay(for: commitDate)
+                
+                // Check if commit is within the current week
+                if commitDayStart >= startOfWeek && commitDayStart <= endOfWeek {
+                    let dayKey = dayFormatter.string(from: commitDate)
+                    weeklyCommits[dayKey, default: 0] += 1
+                }
             }
         }
         
@@ -217,7 +239,7 @@ class GitHubService: ObservableObject {
         
         // Parse commit dates and convert to local timezone
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
         dateFormatter.timeZone = TimeZone(identifier: "UTC")
         
         let calendar = Calendar.current
@@ -258,7 +280,7 @@ class GitHubService: ObservableObject {
         
         // Parse commit dates and convert to local timezone
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
         dateFormatter.timeZone = TimeZone(identifier: "UTC")
         
         let calendar = Calendar.current
@@ -299,7 +321,7 @@ class GitHubService: ObservableObject {
     
     private func formatRelativeTime(_ dateString: String) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
         
         guard let date = formatter.date(from: dateString) else {
             return "Unknown"
