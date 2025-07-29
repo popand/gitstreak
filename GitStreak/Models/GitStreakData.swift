@@ -149,7 +149,7 @@ class GitHubService: ObservableObject {
             throw GitHubError.notAuthenticated
         }
         
-        guard let url = URL(string: "\(baseURL)/search/commits?q=author:\(username)&sort=committer-date&order=desc&per_page=10") else {
+        guard let url = URL(string: "\(baseURL)/search/commits?q=author:\(username)&sort=committer-date&order=desc&per_page=100") else {
             throw GitHubError.invalidURL
         }
         
@@ -208,11 +208,85 @@ class GitHubService: ObservableObject {
     }
     
     private func calculateCurrentStreak(commits: [GitHubCommit]) -> Int {
-        return 7
+        guard !commits.isEmpty else { return 0 }
+        
+        // Parse commit dates and convert to local timezone
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        
+        // Group commits by date (day only, in local timezone)
+        var commitDays = Set<Date>()
+        for commit in commits {
+            if let commitDate = dateFormatter.date(from: commit.commit.committer.date) {
+                let dayStart = calendar.startOfDay(for: commitDate)
+                commitDays.insert(dayStart)
+            }
+        }
+        
+        // Calculate streak starting from today going backwards
+        var streak = 0
+        var currentDay = today
+        
+        // Check if today has commits, if not check yesterday as starting point
+        if !commitDays.contains(currentDay) {
+            currentDay = calendar.date(byAdding: .day, value: -1, to: currentDay) ?? currentDay
+        }
+        
+        // Count consecutive days with commits going backwards from current day
+        while commitDays.contains(currentDay) {
+            streak += 1
+            currentDay = calendar.date(byAdding: .day, value: -1, to: currentDay) ?? break
+        }
+        
+        return streak
     }
     
     private func calculateBestStreak(commits: [GitHubCommit]) -> Int {
-        return 23
+        guard !commits.isEmpty else { return 0 }
+        
+        // Parse commit dates and convert to local timezone
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        
+        let calendar = Calendar.current
+        
+        // Group commits by date (day only, in local timezone)
+        var commitDays = Set<Date>()
+        for commit in commits {
+            if let commitDate = dateFormatter.date(from: commit.commit.committer.date) {
+                let dayStart = calendar.startOfDay(for: commitDate)
+                commitDays.insert(dayStart)
+            }
+        }
+        
+        // Convert to sorted array for streak calculation
+        let sortedDays = commitDays.sorted()
+        guard !sortedDays.isEmpty else { return 0 }
+        
+        var bestStreak = 1
+        var currentStreak = 1
+        
+        // Find longest consecutive sequence of days
+        for i in 1..<sortedDays.count {
+            let previousDay = sortedDays[i-1]
+            let currentDay = sortedDays[i]
+            
+            // Check if current day is exactly one day after previous day
+            if let nextDay = calendar.date(byAdding: .day, value: 1, to: previousDay),
+               calendar.isDate(nextDay, inSameDayAs: currentDay) {
+                currentStreak += 1
+                bestStreak = max(bestStreak, currentStreak)
+            } else {
+                currentStreak = 1
+            }
+        }
+        
+        return bestStreak
     }
     
     private func formatRelativeTime(_ dateString: String) -> String {
