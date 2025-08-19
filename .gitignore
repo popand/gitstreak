@@ -29,3 +29,6 @@ next-env.d.ts
 # Claude Code configuration
 CLAUDE.md
 .claude_code/
+
+# macOS
+.DS_Store
