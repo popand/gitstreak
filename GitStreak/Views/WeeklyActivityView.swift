@@ -19,13 +19,19 @@ struct WeeklyActivityView: View {
                     .fontWeight(.medium)
             }
             
-            HStack(spacing: 8) {
+            HStack(alignment: .bottom, spacing: 8) {
                 ForEach(weeklyData) { day in
                     VStack(spacing: 8) {
-                        Rectangle()
-                            .fill(day.active ? Color.green : Color.gray.opacity(0.3))
-                            .frame(width: 32, height: max(CGFloat(day.commits) * 8, 16))
-                            .cornerRadius(4)
+                        ZStack(alignment: .bottom) {
+                            Rectangle()
+                                .fill(Color.clear)
+                                .frame(width: 32, height: 100)
+                            
+                            Rectangle()
+                                .fill(day.active ? Color.green : Color.gray.opacity(0.3))
+                                .frame(width: 32, height: max(CGFloat(day.commits) * 8, 16))
+                                .cornerRadius(4)
+                        }
                         
                         Text(day.day)
                             .font(.caption2)
