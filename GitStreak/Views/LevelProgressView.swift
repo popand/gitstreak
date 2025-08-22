@@ -8,65 +8,42 @@ struct LevelProgressView: View {
     let xpToNext: Int
     
     var body: some View {
-        VStack(spacing: 16) {
-            HStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .fill(Color.purple.opacity(0.1))
-                        .frame(width: 40, height: 40)
-                    
-                    Image(systemName: "star.fill")
-                        .foregroundColor(.purple)
-                        .font(.title2)
-                }
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Level \(level)")
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    
-                    Text(levelTitle)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Level \(level)")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.primary)
                 
                 Spacer()
                 
-                Text("\(xp) XP")
-                    .font(.caption)
-                    .foregroundColor(.purple)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.purple.opacity(0.1))
-                    .cornerRadius(8)
-            }
-            
-            VStack(spacing: 8) {
-                HStack {
-                    Text("Progress")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    
-                    Spacer()
-                    
-                    Text("\(Int(progress * 100))%")
-                        .font(.caption)
-                        .foregroundColor(.primary)
-                        .fontWeight(.medium)
-                }
-                
-                ProgressView(value: progress)
-                    .progressViewStyle(LinearProgressViewStyle(tint: .purple))
-                    .scaleEffect(x: 1, y: 2, anchor: .center)
-                
-                Text("\(xpToNext) XP to Level \(level + 1)")
-                    .font(.caption2)
+                Text("\(xp.formatted()) XP")
+                    .font(.system(size: 14, weight: .medium))
                     .foregroundColor(.secondary)
             }
+            
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(Color(.systemGray5))
+                        .frame(height: 8)
+                    
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    Color(red: 0.2, green: 0.8, blue: 0.4),
+                                    Color(red: 0.3, green: 0.5, blue: 0.9),
+                                    Color(red: 0.6, green: 0.3, blue: 0.9)
+                                ]),
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: geometry.size.width * progress, height: 8)
+                }
+            }
+            .frame(height: 8)
         }
-        .padding(20)
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+        .padding(.vertical, 20)
     }
 }

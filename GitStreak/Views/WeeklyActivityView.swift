@@ -4,45 +4,43 @@ struct WeeklyActivityView: View {
     let weeklyData: [WeeklyData]
     let totalCommits: Int
     
+    var maxCommits: Int {
+        weeklyData.map { $0.commits }.max() ?? 1
+    }
+    
     var body: some View {
-        VStack(spacing: 16) {
-            HStack {
-                Text("Daily Activity")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                
-                Spacer()
-                
-                Text("\(totalCommits) commits")
-                    .font(.caption)
-                    .foregroundColor(.green)
-                    .fontWeight(.medium)
-            }
+        VStack(alignment: .leading, spacing: 16) {
+            Text("This Week")
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundColor(.primary)
             
-            HStack(alignment: .bottom, spacing: 8) {
+            HStack(alignment: .bottom, spacing: 12) {
                 ForEach(weeklyData) { day in
-                    VStack(spacing: 8) {
-                        ZStack(alignment: .bottom) {
-                            Rectangle()
-                                .fill(Color.clear)
-                                .frame(width: 32, height: 100)
-                            
-                            Rectangle()
-                                .fill(day.active ? Color.green : Color.gray.opacity(0.3))
-                                .frame(width: 32, height: max(CGFloat(day.commits) * 8, 16))
-                                .cornerRadius(4)
+                    VStack(spacing: 6) {
+                        GeometryReader { geometry in
+                            VStack {
+                                Spacer()
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(
+                                        day.active ? 
+                                        Color(red: 0.2, green: 0.8, blue: 0.4) : 
+                                        Color(.systemGray5)
+                                    )
+                                    .frame(height: max(
+                                        CGFloat(day.commits) / CGFloat(maxCommits) * geometry.size.height,
+                                        8
+                                    ))
+                            }
                         }
                         
                         Text(day.day)
-                            .font(.caption2)
+                            .font(.system(size: 12, weight: .medium))
                             .foregroundColor(.secondary)
                     }
                 }
             }
+            .frame(height: 120)
         }
-        .padding(20)
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+        .padding(.vertical, 20)
     }
 }
