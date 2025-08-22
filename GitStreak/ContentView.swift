@@ -226,22 +226,31 @@ struct SettingsView: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 24) {
-                if gitHubService.isAuthenticated {
-                    authenticatedView
-                } else {
-                    authenticationView
-                }
+            ZStack {
+                Color(.systemGroupedBackground)
+                    .ignoresSafeArea()
                 
-                Spacer()
+                ScrollView {
+                    VStack(spacing: 20) {
+                        if gitHubService.isAuthenticated {
+                            authenticatedView
+                        } else {
+                            authenticationView
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 16)
+                    .padding(.bottom, 32)
+                }
             }
-            .padding(24)
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
+                    Button(action: { dismiss() }) {
+                        Text("Done")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.blue)
                     }
                 }
             }
@@ -254,121 +263,303 @@ struct SettingsView: View {
     }
     
     private var authenticatedView: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 20) {
+            // Success Card with Gradient
             VStack(spacing: 16) {
                 Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 60))
-                    .foregroundColor(.green)
+                    .font(.system(size: 64))
+                    .foregroundColor(.white)
+                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
                 
-                Text("Connected to GitHub")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                
-                if let username = gitHubService.username {
-                    Text("@\(username)")
-                        .font(.headline)
-                        .foregroundColor(.secondary)
+                VStack(spacing: 8) {
+                    Text("Connected to GitHub")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(.white)
+                    
+                    if let username = gitHubService.username {
+                        Text("@\(username)")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.white.opacity(0.95))
+                    }
                 }
             }
-            .padding(.vertical, 24)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 32)
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color(red: 0.2, green: 0.8, blue: 0.4),
+                        Color(red: 0.3, green: 0.5, blue: 0.9),
+                        Color(red: 0.6, green: 0.3, blue: 0.9)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .cornerRadius(20)
+            .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 4)
             
-            VStack(spacing: 16) {
-                Button("Refresh Data") {
-                    dataModel.refreshData()
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: 50)
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(12)
-                .fontWeight(.semibold)
+            // Account Info Section
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Account Information")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.primary)
                 
-                Button("Disconnect Account") {
+                VStack(spacing: 12) {
+                    HStack {
+                        Image(systemName: "person.circle.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(.blue)
+                            .frame(width: 28)
+                        
+                        Text("Username")
+                            .font(.system(size: 14))
+                            .foregroundColor(.secondary)
+                        
+                        Spacer()
+                        
+                        if let username = gitHubService.username {
+                            Text(username)
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(.primary)
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(Color(.systemBackground))
+                    .cornerRadius(12)
+                    
+                    HStack {
+                        Image(systemName: "checkmark.shield.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(.green)
+                            .frame(width: 28)
+                        
+                        Text("Status")
+                            .font(.system(size: 14))
+                            .foregroundColor(.secondary)
+                        
+                        Spacer()
+                        
+                        Text("Authenticated")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.green)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(Color(.systemBackground))
+                    .cornerRadius(12)
+                }
+            }
+            
+            // Action Buttons
+            VStack(spacing: 12) {
+                Button(action: { dataModel.refreshData() }) {
+                    HStack {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 16, weight: .semibold))
+                        
+                        Text("Refresh Data")
+                            .fontWeight(.semibold)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 52)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                Color.blue,
+                                Color.blue.opacity(0.8)
+                            ]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .foregroundColor(.white)
+                    .cornerRadius(16)
+                    .shadow(color: Color.blue.opacity(0.3), radius: 8, x: 0, y: 4)
+                }
+                
+                Button(action: {
                     gitHubService.logout()
                     dataModel.refreshData()
+                }) {
+                    HStack {
+                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                            .font(.system(size: 16, weight: .semibold))
+                        
+                        Text("Disconnect Account")
+                            .fontWeight(.semibold)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 52)
+                    .background(Color(.systemBackground))
+                    .foregroundColor(.red)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.red.opacity(0.3), lineWidth: 1)
+                    )
+                    .cornerRadius(16)
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 50)
-                .background(Color.red.opacity(0.1))
-                .foregroundColor(.red)
-                .cornerRadius(12)
-                .fontWeight(.semibold)
             }
+            .padding(.top, 8)
         }
     }
     
     private var authenticationView: some View {
-        VStack(spacing: 24) {
-            VStack(spacing: 16) {
-                Image(systemName: "person.crop.circle.badge.plus")
-                    .font(.system(size: 60))
-                    .foregroundColor(.blue)
-                
-                Text("Connect GitHub Account")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                
-                Text("Track your real GitHub activity and streaks")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-            .padding(.vertical, 24)
-            
-            VStack(alignment: .leading, spacing: 12) {
-                Text("GitHub Personal Access Token")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                
-                Text("1. Go to GitHub Settings → Developer Settings → Personal Access Tokens")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                
-                Text("2. Generate a new token with 'repo' and 'user' scopes")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                
-                Text("3. Paste your token below:")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                
-                SecureField("ghp_xxxxxxxxxxxxxxxxxxxx", text: $tokenInput)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .font(.system(.body, design: .monospaced))
-                
-                if !tokenInput.isEmpty && !isValidGitHubToken(tokenInput) {
-                    Text("Invalid token format. Must start with 'ghp_' (40+ chars) or 'github_pat_' (50+ chars)")
-                        .font(.caption)
-                        .foregroundColor(.red)
-                        .multilineTextAlignment(.leading)
+        VStack(spacing: 20) {
+            // Welcome Card
+            VStack(spacing: 20) {
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    Color(red: 0.2, green: 0.8, blue: 0.4).opacity(0.2),
+                                    Color(red: 0.3, green: 0.5, blue: 0.9).opacity(0.2)
+                                ]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 100, height: 100)
+                    
+                    Image(systemName: "link.circle.fill")
+                        .font(.system(size: 56))
+                        .foregroundStyle(
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    Color(red: 0.2, green: 0.8, blue: 0.4),
+                                    Color(red: 0.3, green: 0.5, blue: 0.9)
+                                ]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
                 }
                 
-                Button("Generate Token on GitHub") {
+                VStack(spacing: 8) {
+                    Text("Connect GitHub Account")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(.primary)
+                    
+                    Text("Track your real GitHub activity and streaks")
+                        .font(.system(size: 15))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+            }
+            .padding(.vertical, 8)
+            
+            // Instructions Card
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Setup Instructions")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.primary)
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    ForEach([
+                        ("1", "Go to GitHub Settings → Developer Settings"),
+                        ("2", "Select Personal Access Tokens → Tokens (classic)"),
+                        ("3", "Generate token with 'repo' and 'user' scopes")
+                    ], id: \.0) { step in
+                        HStack(alignment: .top, spacing: 12) {
+                            Text(step.0)
+                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                                .frame(width: 24, height: 24)
+                                .background(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            Color(red: 0.3, green: 0.5, blue: 0.9),
+                                            Color(red: 0.6, green: 0.3, blue: 0.9)
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .cornerRadius(12)
+                            
+                            Text(step.1)
+                                .font(.system(size: 14))
+                                .foregroundColor(.primary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                }
+                .padding(16)
+                .background(Color(.systemBackground))
+                .cornerRadius(16)
+            }
+            
+            // Token Input Section
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Personal Access Token")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.primary)
+                
+                VStack(spacing: 8) {
+                    SecureField("ghp_xxxxxxxxxxxxxxxxxxxx", text: $tokenInput)
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .font(.system(size: 14, design: .monospaced))
+                        .padding(16)
+                        .background(Color(.systemBackground))
+                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(tokenBorderColor, lineWidth: 1.5)
+                        )
+                    
+                    if !tokenInput.isEmpty && !isValidGitHubToken(tokenInput) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .font(.system(size: 12))
+                            
+                            Text("Invalid token format")
+                                .font(.system(size: 12))
+                        }
+                        .foregroundColor(.red)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+                
+                Button(action: {
                     if let url = URL(string: "https://github.com/settings/tokens/new?scopes=repo,user&description=GitStreak%20App") {
                         UIApplication.shared.open(url)
                     }
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "safari")
+                            .font(.system(size: 12))
+                        
+                        Text("Generate Token on GitHub")
+                            .font(.system(size: 13, weight: .medium))
+                    }
+                    .foregroundColor(.blue)
                 }
-                .font(.caption)
-                .foregroundColor(.blue)
             }
             
+            // Connect Button
             Button(action: authenticateWithToken) {
-                HStack {
+                HStack(spacing: 8) {
                     if isAuthenticating {
                         ProgressView()
-                            .scaleEffect(0.8)
-                            .foregroundColor(.white)
+                            .scaleEffect(0.9)
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    } else {
+                        Image(systemName: "link")
+                            .font(.system(size: 16, weight: .semibold))
                     }
                     
                     Text(isAuthenticating ? "Connecting..." : "Connect Account")
                         .fontWeight(.semibold)
                 }
+                .frame(maxWidth: .infinity)
+                .frame(height: 52)
+                .background(connectButtonBackground)
+                .foregroundColor(.white)
+                .cornerRadius(16)
+                .shadow(color: connectButtonShadowColor, radius: 8, x: 0, y: 4)
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(buttonBackgroundColor)
-            .foregroundColor(.white)
-            .cornerRadius(12)
             .disabled(tokenInput.isEmpty || isAuthenticating || !isValidGitHubToken(tokenInput))
         }
     }
@@ -407,13 +598,38 @@ struct SettingsView: View {
                (trimmedToken.hasPrefix("github_pat_") && trimmedToken.count >= 50)
     }
     
-    private var buttonBackgroundColor: Color {
+    private var tokenBorderColor: Color {
         if tokenInput.isEmpty {
-            return Color.gray
+            return Color(.systemGray4)
         } else if isValidGitHubToken(tokenInput) {
-            return Color.blue
+            return Color.green.opacity(0.5)
         } else {
-            return Color.red.opacity(0.6)
+            return Color.red.opacity(0.5)
+        }
+    }
+    
+    private var connectButtonBackground: some View {
+        Group {
+            if tokenInput.isEmpty || !isValidGitHubToken(tokenInput) {
+                Color.gray.opacity(0.3)
+            } else {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color(red: 0.2, green: 0.8, blue: 0.4),
+                        Color(red: 0.3, green: 0.5, blue: 0.9)
+                    ]),
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            }
+        }
+    }
+    
+    private var connectButtonShadowColor: Color {
+        if tokenInput.isEmpty || !isValidGitHubToken(tokenInput) {
+            return Color.clear
+        } else {
+            return Color.blue.opacity(0.3)
         }
     }
 }
