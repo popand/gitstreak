@@ -32,7 +32,7 @@ struct HomeView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: 20) {
                 // Header
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
@@ -63,8 +63,8 @@ struct HomeView: View {
                         }
                     }
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, 20)
+                .padding(.horizontal, 20)
+                .padding(.top, 16)
                 
                 // Current Streak
                 StreakCardView(
@@ -72,7 +72,7 @@ struct HomeView: View {
                     bestStreak: dataModel.bestStreak,
                     isLoading: dataModel.isLoading
                 )
-                .padding(.horizontal, 24)
+                .padding(.horizontal, 20)
                 
                 // Level Progress
                 LevelProgressView(
@@ -82,54 +82,45 @@ struct HomeView: View {
                     progress: dataModel.progress,
                     xpToNext: dataModel.xpToNext
                 )
-                .padding(.horizontal, 24)
+                .padding(.horizontal, 20)
                 
-                // This Week Section
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("This Week")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .padding(.horizontal, 24)
-                    
-                    WeeklyActivityView(
-                        weeklyData: dataModel.weeklyData,
-                        totalCommits: dataModel.totalCommitsThisWeek
-                    )
-                    .padding(.horizontal, 24)
-                }
+                // Weekly Activity
+                WeeklyActivityView(
+                    weeklyData: dataModel.weeklyData,
+                    totalCommits: dataModel.totalCommitsThisWeek
+                )
+                .padding(.horizontal, 20)
                 
                 // Recent Activity Section
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Text("Recent Activity")
-                            .font(.title3)
-                            .fontWeight(.semibold)
+                            .font(.system(size: 15, weight: .semibold))
                         
                         Spacer()
                         
                         Button("View All") {
                             // Handle view all
                         }
-                        .font(.caption)
+                        .font(.system(size: 13))
                         .foregroundColor(.blue)
                     }
-                    .padding(.horizontal, 24)
+                    .padding(.horizontal, 20)
                     
                     RecentActivityView(commits: dataModel.recentCommits)
-                        .padding(.horizontal, 24)
+                        .padding(.horizontal, 20)
                 }
                 
                 // Achievements Section
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 12) {
                     Text("Achievements")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .padding(.horizontal, 24)
+                        .font(.system(size: 15, weight: .semibold))
+                        .padding(.horizontal, 20)
                     
                     AchievementsView(achievements: dataModel.achievements)
-                        .padding(.horizontal, 24)
+                        .padding(.horizontal, 20)
                 }
-                .padding(.bottom, 24)
+                .padding(.bottom, 20)
             }
         }
         .sheet(isPresented: $showSettings) {
