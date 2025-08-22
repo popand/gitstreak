@@ -514,7 +514,7 @@ struct SettingsView: View {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .font(.system(size: 12))
                             
-                            Text("Invalid token format")
+                            Text("Invalid token format. Must be a valid GitHub token.")
                                 .font(.system(size: 12))
                         }
                         .foregroundColor(.red)
@@ -591,11 +591,30 @@ struct SettingsView: View {
     private func isValidGitHubToken(_ token: String) -> Bool {
         let trimmedToken = token.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        // Check if token has the correct prefix and minimum length
-        // GitHub Personal Access Tokens (classic) start with "ghp_" and are 40+ characters
-        // GitHub Fine-grained Personal Access Tokens start with "github_pat_" and are longer
-        return (trimmedToken.hasPrefix("ghp_") && trimmedToken.count >= 40) ||
-               (trimmedToken.hasPrefix("github_pat_") && trimmedToken.count >= 50)
+        // Enhanced validation using regex patterns for GitHub tokens
+        // GitHub Personal Access Tokens (classic): ghp_ + 36+ alphanumeric characters
+        // GitHub Fine-grained Personal Access Tokens: github_pat_ + 50+ alphanumeric/underscore characters
+        let classicTokenPattern = "^ghp_[A-Za-z0-9]{36,}$"
+        let fineGrainedTokenPattern = "^github_pat_[A-Za-z0-9_]{50,}$"
+        
+        guard !trimmedToken.isEmpty else { return false }
+        
+        // Use NSRegularExpression for secure pattern matching
+        do {
+            let classicRegex = try NSRegularExpression(pattern: classicTokenPattern)
+            let fineGrainedRegex = try NSRegularExpression(pattern: fineGrainedTokenPattern)
+            
+            let range = NSRange(location: 0, length: trimmedToken.utf16.count)
+            
+            let matchesClassic = classicRegex.firstMatch(in: trimmedToken, range: range) != nil
+            let matchesFineGrained = fineGrainedRegex.firstMatch(in: trimmedToken, range: range) != nil
+            
+            return matchesClassic || matchesFineGrained
+        } catch {
+            // If regex compilation fails, fall back to basic validation as a safety measure
+            return (trimmedToken.hasPrefix("ghp_") && trimmedToken.count >= 40) ||
+                   (trimmedToken.hasPrefix("github_pat_") && trimmedToken.count >= 50)
+        }
     }
     
     private var tokenBorderColor: Color {
