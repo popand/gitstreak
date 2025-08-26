@@ -4,12 +4,12 @@ struct AllCommitsView: View {
     @ObservedObject var dataModel: GitStreakDataModel
     @Environment(\.dismiss) private var dismiss
     
-    private var commitCountText: String {
+    internal var commitCountText: String {
         let count = dataModel.monthlyCommits.count
         return "\(count) \(count == 1 ? "commit" : "commits")"
     }
     
-    private func formatLargeNumber(_ number: Int) -> String {
+    internal func formatLargeNumber(_ number: Int) -> String {
         if number >= 1000000 {
             return String(format: "%.1fM", Double(number) / 1000000.0)
         } else if number >= 1000 {
@@ -18,15 +18,21 @@ struct AllCommitsView: View {
         return "\(number)"
     }
     
-    private func sanitizeCommitMessage(_ message: String) -> String {
-        return message
+    internal func sanitizeCommitMessage(_ message: String) -> String {
+        let sanitized = message
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .replacingOccurrences(of: "\n", with: " ")
             .replacingOccurrences(of: "\r", with: " ")
             .replacingOccurrences(of: "\t", with: " ")
-            .replacingOccurrences(of: "  ", with: " ") // Replace double spaces
-            .prefix(200)
-            .description
+        
+        // Replace multiple consecutive spaces with a single space using regex
+        let singleSpaced = sanitized.replacingOccurrences(
+            of: " +", 
+            with: " ", 
+            options: .regularExpression
+        )
+        
+        return String(singleSpaced.prefix(200))
     }
     
     var body: some View {

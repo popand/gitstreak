@@ -318,7 +318,8 @@ class GitHubServiceFunctionalTests: XCTestCase {
                 message: message,
                 committer: Committer(date: formatter.string(from: date))
             ),
-            repository: Repository(name: repo)
+            repository: Repository(name: repo, owner: nil),
+            stats: nil
         )
     }
     
@@ -337,11 +338,11 @@ class GitHubServiceFunctionalTests: XCTestCase {
         let weekday = calendar.component(.weekday, from: today)
         let daysFromMonday = (weekday == 1) ? 6 : weekday - 2
         guard let startOfWeek = calendar.date(byAdding: .day, value: -daysFromMonday, to: calendar.startOfDay(for: today)) else {
-            return ContributionStats(currentStreak: 0, bestStreak: 0, weeklyCommits: [:], recentCommits: [])
+            return ContributionStats(currentStreak: 0, bestStreak: 0, weeklyCommits: [:], recentCommits: [], monthlyCommits: [])
         }
         
         guard let endOfWeek = calendar.date(byAdding: .day, value: 6, to: startOfWeek) else {
-            return ContributionStats(currentStreak: 0, bestStreak: 0, weeklyCommits: [:], recentCommits: [])
+            return ContributionStats(currentStreak: 0, bestStreak: 0, weeklyCommits: [:], recentCommits: [], monthlyCommits: [])
         }
         
         for commit in commits {
@@ -368,6 +369,16 @@ class GitHubServiceFunctionalTests: XCTestCase {
                     message: commit.commit.message,
                     time: formatRelativeTimeFromStringForTesting(commit.commit.committer.date),
                     commits: 1
+                )
+            },
+            monthlyCommits: commits.prefix(30).map { commit in
+                CommitData(
+                    repo: commit.repository.name,
+                    message: commit.commit.message,
+                    time: formatRelativeTimeFromStringForTesting(commit.commit.committer.date),
+                    commits: 1,
+                    additions: commit.stats?.additions,
+                    deletions: commit.stats?.deletions
                 )
             }
         )

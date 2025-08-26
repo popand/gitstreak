@@ -445,7 +445,8 @@ class GitStreakDataModelTests: XCTestCase {
                         date: ISO8601DateFormatter().string(from: commitDate)
                     )
                 ),
-                repository: Repository(name: "test-repo")
+                repository: Repository(name: "test-repo", owner: nil),
+                stats: nil
             )
             commits.append(commit)
         }
