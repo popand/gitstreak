@@ -229,8 +229,8 @@ class GitHubService: ObservableObject {
                     message: commit.commit.message,
                     time: formatRelativeTime(commit.commit.committer.date),
                     commits: 1,
-                    additions: Int.random(in: 10...200),  // Mock additions for now
-                    deletions: Int.random(in: 5...50)     // Mock deletions for now
+                    additions: nil,  // Real additions data requires fetching individual commit details
+                    deletions: nil   // Real deletions data requires fetching individual commit details
                 )
             }
             return nil
