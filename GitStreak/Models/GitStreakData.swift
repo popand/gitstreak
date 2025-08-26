@@ -654,6 +654,49 @@ struct Achievement: Identifiable {
     let description: String
     let icon: String
     let unlocked: Bool
+    let category: AchievementCategory
+    
+    init(title: String, description: String, icon: String, unlocked: Bool, category: AchievementCategory = .streaks) {
+        self.title = title
+        self.description = description
+        self.icon = icon
+        self.unlocked = unlocked
+        self.category = category
+    }
+}
+
+enum AchievementCategory: String, CaseIterable {
+    case streaks = "🔥 Streaks"
+    case volume = "📊 Volume" 
+    case dailyPatterns = "⏰ Daily Patterns"
+    case weeklyPatterns = "📅 Weekly Patterns"
+    case codeImpact = "💥 Code Impact"
+    case repositoryDiversity = "🏗️ Repository Diversity"
+    case specialMilestones = "🎯 Special Milestones"
+    
+    var emoji: String {
+        switch self {
+        case .streaks: return "🔥"
+        case .volume: return "📊"
+        case .dailyPatterns: return "⏰"
+        case .weeklyPatterns: return "📅"
+        case .codeImpact: return "💥"
+        case .repositoryDiversity: return "🏗️"
+        case .specialMilestones: return "🎯"
+        }
+    }
+    
+    var displayName: String {
+        switch self {
+        case .streaks: return "Streaks"
+        case .volume: return "Volume"
+        case .dailyPatterns: return "Daily Patterns"
+        case .weeklyPatterns: return "Weekly Patterns"
+        case .codeImpact: return "Code Impact"
+        case .repositoryDiversity: return "Repository Diversity"
+        case .specialMilestones: return "Special Milestones"
+        }
+    }
 }
 
 class GitStreakDataModel: ObservableObject {
@@ -681,11 +724,15 @@ class GitStreakDataModel: ObservableObject {
     ]
     
     @Published var achievements: [Achievement] = [
-        Achievement(title: "First Commit", description: "Make your first commit", icon: "🌱", unlocked: false),
-        Achievement(title: "Week Warrior", description: "7 day streak", icon: "🔥", unlocked: false),
-        Achievement(title: "Early Bird", description: "Commit before 9 AM", icon: "🌅", unlocked: false),
-        Achievement(title: "Night Owl", description: "Commit after 10 PM", icon: "🦉", unlocked: false)
+        Achievement(title: "First Commit", description: "Make your first commit", icon: "🌱", unlocked: false, category: .streaks),
+        Achievement(title: "Week Warrior", description: "7 day streak", icon: "🔥", unlocked: false, category: .streaks),
+        Achievement(title: "Early Bird", description: "Commit before 9 AM", icon: "🌅", unlocked: false, category: .dailyPatterns),
+        Achievement(title: "Night Owl", description: "Commit after 10 PM", icon: "🦉", unlocked: false, category: .dailyPatterns)
     ]
+    
+    @Published var totalAchievementXP: Int = 0
+    @Published var unlockedAchievementCount: Int = 0  
+    @Published var recentlyUnlockedAchievements: [Achievement] = []
     
     private let gitHubService = GitHubService.shared
     
@@ -772,9 +819,11 @@ class GitStreakDataModel: ObservableObject {
             WeeklyData(day: "Sun", commits: 7, active: true)
         ]
         
-        achievements[0] = Achievement(title: "First Commit", description: "Make your first commit", icon: "🌱", unlocked: true)
-        achievements[1] = Achievement(title: "Week Warrior", description: "7 day streak", icon: "🔥", unlocked: true)
-        achievements[2] = Achievement(title: "Early Bird", description: "Commit before 9 AM", icon: "🌅", unlocked: true)
+        achievements[0] = Achievement(title: "First Commit", description: "Make your first commit", icon: "🌱", unlocked: true, category: .streaks)
+        achievements[1] = Achievement(title: "Week Warrior", description: "7 day streak", icon: "🔥", unlocked: true, category: .streaks)
+        achievements[2] = Achievement(title: "Early Bird", description: "Commit before 9 AM", icon: "🌅", unlocked: true, category: .dailyPatterns)
+        
+        updateAchievementStats()
     }
     
     private func updateWeeklyData(from commits: [String: Int]) {
@@ -807,8 +856,15 @@ class GitStreakDataModel: ObservableObject {
     }
     
     private func updateAchievements() {
-        achievements[0] = Achievement(title: "First Commit", description: "Make your first commit", icon: "🌱", unlocked: !recentCommits.isEmpty)
-        achievements[1] = Achievement(title: "Week Warrior", description: "7 day streak", icon: "🔥", unlocked: currentStreak >= 7)
+        achievements[0] = Achievement(title: "First Commit", description: "Make your first commit", icon: "🌱", unlocked: !recentCommits.isEmpty, category: .streaks)
+        achievements[1] = Achievement(title: "Week Warrior", description: "7 day streak", icon: "🔥", unlocked: currentStreak >= 7, category: .streaks)
+        updateAchievementStats()
+    }
+    
+    private func updateAchievementStats() {
+        unlockedAchievementCount = achievements.filter { $0.unlocked }.count
+        totalAchievementXP = unlockedAchievementCount * 100 // Simple XP calculation for demo
+        recentlyUnlockedAchievements = achievements.filter { $0.unlocked }
     }
     
     func refreshData() {
