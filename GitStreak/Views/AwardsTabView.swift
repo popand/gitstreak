@@ -20,14 +20,16 @@ struct AwardsTabView: View {
                         AchievementCategoryView(
                             category: category,
                             achievements: achievementsByCategory[category] ?? [],
-                            isExpanded: expandedCategories.contains(category)
-                        ) {
-                            if expandedCategories.contains(category) {
-                                expandedCategories.remove(category)
-                            } else {
-                                expandedCategories.insert(category)
-                            }
-                        }
+                            isExpanded: expandedCategories.contains(category),
+                            onToggle: {
+                                if expandedCategories.contains(category) {
+                                    expandedCategories.remove(category)
+                                } else {
+                                    expandedCategories.insert(category)
+                                }
+                            },
+                            dataModel: dataModel
+                        )
                     }
                 }
                 
