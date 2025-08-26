@@ -223,7 +223,8 @@ class GitStreakIntegrationTests: XCTestCase {
                     message: "Test commit",
                     committer: Committer(date: "invalid-date")
                 ),
-                repository: Repository(name: "test-repo")
+                repository: Repository(name: "test-repo", owner: nil),
+                stats: nil
             ),
             GitHubCommit(
                 sha: "def456",
@@ -231,7 +232,8 @@ class GitStreakIntegrationTests: XCTestCase {
                     message: "Another test commit",
                     committer: Committer(date: "")
                 ),
-                repository: Repository(name: "test-repo")
+                repository: Repository(name: "test-repo", owner: nil),
+                stats: nil
             )
         ]
         
@@ -253,7 +255,8 @@ class GitStreakIntegrationTests: XCTestCase {
                 message: "Invalid commit",
                 committer: Committer(date: "not-a-date")
             ),
-            repository: Repository(name: "test-repo")
+            repository: Repository(name: "test-repo", owner: nil),
+            stats: nil
         )
         
         let mixedCommits = [validCommit, invalidCommit]
@@ -364,7 +367,8 @@ class GitStreakIntegrationTests: XCTestCase {
                 message: message,
                 committer: Committer(date: formatter.string(from: date))
             ),
-            repository: Repository(name: repo)
+            repository: Repository(name: repo, owner: nil),
+            stats: nil
         )
     }
     

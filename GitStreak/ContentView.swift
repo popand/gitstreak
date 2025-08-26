@@ -29,6 +29,7 @@ struct ContentView: View {
 struct HomeView: View {
     @ObservedObject var dataModel: GitStreakDataModel
     @State private var showSettings = false
+    @State private var showAllCommits = false
     
     var body: some View {
         ScrollView {
@@ -100,7 +101,7 @@ struct HomeView: View {
                         Spacer()
                         
                         Button("View All") {
-                            // Handle view all
+                            showAllCommits = true
                         }
                         .font(.system(size: 13))
                         .foregroundColor(.blue)
@@ -125,6 +126,9 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showSettings) {
             SettingsView(dataModel: dataModel)
+        }
+        .sheet(isPresented: $showAllCommits) {
+            AllCommitsView(dataModel: dataModel)
         }
     }
     
