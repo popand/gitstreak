@@ -910,86 +910,6 @@ struct AchievementCategoryView: View {
 struct SimpleAchievementCardView: View {
     let achievement: Achievement
     
-    private func getAchievementXP() -> Int {
-        // Map achievement titles to their XP values
-        let xpValues: [String: Int] = [
-            // Streak achievements (25-2000 XP)
-            "First Flame": 25,
-            "Getting Warmed Up": 50,
-            "Week Warrior": 100,
-            "Fortnight Fighter": 200,
-            "Monthly Master": 350,
-            "Quarter Champion": 500,
-            "Half-Year Hero": 750,
-            "Annual Achiever": 1000,
-            "Legend Status": 2000,
-            
-            // Volume achievements (25-600 XP)
-            "First Steps": 25,
-            "Getting Started": 50,
-            "Century Club": 100,
-            "Half Grand": 200,
-            "Grand Master": 300,
-            "Mega Committer": 400,
-            "Ultra Producer": 500,
-            "Code Machine": 600,
-            
-            // Daily pattern achievements (75-350 XP)
-            "Early Bird": 75,
-            "Morning Person": 100,
-            "Lunch Coder": 125,
-            "Afternoon Warrior": 150,
-            "Evening Developer": 175,
-            "Night Owl": 200,
-            "All-Day All-Night": 300,
-            "Round the Clock": 350,
-            
-            // Weekly pattern achievements (100-300 XP)
-            "Weekend Warrior": 100,
-            "Weekday Hero": 100,
-            "Perfect Week": 300,
-            "Monday Motivator": 150,
-            "Friday Finisher": 150,
-            "Hump Day Helper": 125,
-            
-            // Code impact achievements (100-500 XP)
-            "First Impact": 100,
-            "Small Changes": 150,
-            "Code Builder": 200,
-            "Major Contributor": 300,
-            "Code Architect": 400,
-            "Legacy Creator": 500,
-            "Refactor Master": 350,
-            "Efficiency Expert": 275,
-            
-            // Repository diversity achievements (150-500 XP)
-            "Multi-Tasker": 150,
-            "Project Hopper": 200,
-            "Polyglot": 300,
-            "Repository Master": 400,
-            "Ecosystem Explorer": 500,
-            
-            // Special milestones (175-1500 XP)
-            "First Year": 200,
-            "Dedication Award": 400,
-            "Holiday Spirit": 250,
-            "Valentine Coder": 225,
-            "April Fool": 175,
-            "Summer Coder": 200,
-            "Halloween Hacker": 275,
-            "Thanksgiving Thankful": 300,
-            "Commit Storm": 450,
-            "Message Master": 350,
-            "Consistency King": 600,
-            "Streak Saver": 500,
-            "New Year Coder": 350,
-            "Birthday Coder": 400
-        ]
-        
-        // Return XP value or 100 as default
-        return xpValues[achievement.title] ?? 100
-    }
-    
     var body: some View {
         HStack(spacing: 12) {
             // Achievement Icon
@@ -998,20 +918,9 @@ struct SimpleAchievementCardView: View {
                 .frame(width: 32, height: 32)
             
             VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 6) {
-                    Text(achievement.title)
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundColor(achievement.unlocked ? .primary : .secondary)
-                    
-                    // XP Badge
-                    Text("\(getAchievementXP()) XP")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundColor(achievement.unlocked ? .blue : .gray)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(achievement.unlocked ? Color.blue.opacity(0.1) : Color.gray.opacity(0.1))
-                        .cornerRadius(6)
-                }
+                Text(achievement.title)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(achievement.unlocked ? .primary : .secondary)
                 
                 Text(achievement.description)
                     .font(.system(size: 13, weight: .regular))
