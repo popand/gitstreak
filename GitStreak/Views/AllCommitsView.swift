@@ -10,15 +10,10 @@ struct AllCommitsView: View {
     }
     
     var body: some View {
-        if #available(iOS 16.0, *) {
-            NavigationStack {
-                commitListView
-            }
-        } else {
-            NavigationView {
-                commitListView
-            }
+        NavigationView {
+            commitListView
         }
+        .navigationViewStyle(StackNavigationViewStyle()) // Ensures single column on all devices
     }
     
     private var commitListView: some View {
