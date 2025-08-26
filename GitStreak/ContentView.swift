@@ -155,26 +155,7 @@ struct HomeView: View {
     }
 }
 
-struct AwardsView: View {
-    @ObservedObject var dataModel: GitStreakDataModel
-    
-    var body: some View {
-        VStack {
-            Text("Awards")
-                .font(.title2)
-                .fontWeight(.bold)
-                .padding()
-            
-            Spacer()
-            
-            Text("Coming Soon")
-                .font(.headline)
-                .foregroundColor(.secondary)
-            
-            Spacer()
-        }
-    }
-}
+// AwardsView removed - using AwardsTabView for the full awards implementation
 
 struct StatsView: View {
     @ObservedObject var dataModel: GitStreakDataModel
