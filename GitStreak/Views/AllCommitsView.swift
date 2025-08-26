@@ -11,7 +11,7 @@ struct AllCommitsView: View {
                     .ignoresSafeArea()
                 
                 ScrollView {
-                    VStack(spacing: 20) {
+                    LazyVStack(spacing: 20, pinnedViews: []) {
                         // Monthly Summary Card
                         VStack(alignment: .leading, spacing: 12) {
                             HStack {
@@ -41,12 +41,12 @@ struct AllCommitsView: View {
                         .padding(.horizontal, 24)
                         .padding(.top, 20)
                         
-                        // Commits List
-                        VStack(spacing: 0) {
-                            ForEach(dataModel.monthlyCommits) { commit in
+                        // Commits List - Using LazyVStack for better performance
+                        LazyVStack(spacing: 0) {
+                            ForEach(Array(dataModel.monthlyCommits.enumerated()), id: \.element.id) { index, commit in
                                 CommitRowView(commit: commit)
                                 
-                                if commit.id != dataModel.monthlyCommits.last?.id {
+                                if index < dataModel.monthlyCommits.count - 1 {
                                     Divider()
                                         .padding(.horizontal, 20)
                                 }
@@ -77,16 +77,19 @@ struct AllCommitsView: View {
 struct CommitRowView: View {
     let commit: CommitData
     
+    // Pre-define gradient for better performance
+    private let iconGradient = LinearGradient(
+        colors: [Color.green.opacity(0.3), Color.green.opacity(0.1)],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    
     var body: some View {
         HStack(spacing: 16) {
             // Commit icon with gradient background
             ZStack {
                 Circle()
-                    .fill(LinearGradient(
-                        colors: [Color.green.opacity(0.3), Color.green.opacity(0.1)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ))
+                    .fill(iconGradient)
                     .frame(width: 44, height: 44)
                 
                 Image(systemName: "chevron.left.forwardslash.chevron.right")
