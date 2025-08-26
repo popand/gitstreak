@@ -210,7 +210,7 @@ struct StatsView: View {
                                         CompactAchievementCardView(achievement: achievement)
                                     }
                                 }
-                                .padding(.horizontal, 24)
+                                .padding(.leading, 0)
                             }
                         }
                     }
@@ -222,24 +222,37 @@ struct StatsView: View {
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(.primary)
                     
-                    HStack(spacing: 16) {
-                        StatCardView(
-                            title: "Most Active Day",
-                            value: dataModel.mostActiveWeekDay,
-                            color: .blue
-                        )
+                    VStack(spacing: 16) {
+                        // Top row - 2 cards
+                        HStack(spacing: 16) {
+                            StatCardView(
+                                title: "Most Active Day",
+                                value: dataModel.mostActiveWeekDay,
+                                color: .blue
+                            )
+                            
+                            StatCardView(
+                                title: "Daily Average", 
+                                value: String(format: "%.1f", dataModel.dailyCommitAverage),
+                                color: .green
+                            )
+                        }
                         
-                        StatCardView(
-                            title: "Daily Average",
-                            value: String(format: "%.1f", dataModel.dailyCommitAverage),
-                            color: .green
-                        )
-                        
-                        StatCardView(
-                            title: "Monthly Growth",
-                            value: dataModel.monthlyGrowthPercentage > 0 ? "+\(dataModel.monthlyGrowthPercentage)%" : "\(dataModel.monthlyGrowthPercentage)%",
-                            color: dataModel.monthlyGrowthIsPositive ? .purple : .gray
-                        )
+                        // Bottom row - 1 card centered
+                        HStack(spacing: 16) {
+                            StatCardView(
+                                title: "Monthly Growth",
+                                value: dataModel.monthlyGrowthPercentage > 0 ? "+\(dataModel.monthlyGrowthPercentage)%" : "\(dataModel.monthlyGrowthPercentage)%",
+                                color: dataModel.monthlyGrowthIsPositive ? .purple : .gray
+                            )
+                            
+                            // Invisible spacer card to maintain alignment
+                            StatCardView(
+                                title: "Total Commits", 
+                                value: "\(dataModel.recentCommits.count)",
+                                color: .orange
+                            )
+                        }
                     }
                 }
             }
