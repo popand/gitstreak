@@ -724,10 +724,71 @@ class GitStreakDataModel: ObservableObject {
     ]
     
     @Published var achievements: [Achievement] = [
-        Achievement(title: "First Commit", description: "Make your first commit", icon: "🌱", unlocked: false, category: .streaks),
-        Achievement(title: "Week Warrior", description: "7 day streak", icon: "🔥", unlocked: false, category: .streaks),
-        Achievement(title: "Early Bird", description: "Commit before 9 AM", icon: "🌅", unlocked: false, category: .dailyPatterns),
-        Achievement(title: "Night Owl", description: "Commit after 10 PM", icon: "🦉", unlocked: false, category: .dailyPatterns)
+        // Streak Achievements 🔥 (9 total)
+        Achievement(title: "First Flame", description: "Start your first coding streak", icon: "🔥", unlocked: false, category: .streaks),
+        Achievement(title: "Getting Warmed Up", description: "Keep the momentum going", icon: "🔥", unlocked: false, category: .streaks),
+        Achievement(title: "Week Warrior", description: "One full week of coding", icon: "🔥", unlocked: false, category: .streaks),
+        Achievement(title: "Fortnight Fighter", description: "Two weeks strong", icon: "🔥", unlocked: false, category: .streaks),
+        Achievement(title: "Monthly Master", description: "30 days of dedication", icon: "🔥", unlocked: false, category: .streaks),
+        Achievement(title: "Quarter Champion", description: "90 days of excellence", icon: "🔥", unlocked: false, category: .streaks),
+        Achievement(title: "Half-Year Hero", description: "Six months of consistency", icon: "🔥", unlocked: false, category: .streaks),
+        Achievement(title: "Annual Achiever", description: "A full year of coding", icon: "🔥", unlocked: false, category: .streaks),
+        Achievement(title: "Legend Status", description: "Ultimate dedication", icon: "🔥", unlocked: false, category: .streaks),
+        
+        // Volume Achievements 📊 (8 total)
+        Achievement(title: "First Steps", description: "Your coding journey begins", icon: "📊", unlocked: false, category: .volume),
+        Achievement(title: "Getting Started", description: "Building momentum", icon: "📊", unlocked: false, category: .volume),
+        Achievement(title: "Century Club", description: "Triple digits!", icon: "📊", unlocked: false, category: .volume),
+        Achievement(title: "Half Grand", description: "Halfway to a thousand", icon: "📊", unlocked: false, category: .volume),
+        Achievement(title: "Grand Master", description: "Four digits of dedication", icon: "📊", unlocked: false, category: .volume),
+        Achievement(title: "Mega Committer", description: "Serious productivity", icon: "📊", unlocked: false, category: .volume),
+        Achievement(title: "Ultra Producer", description: "Incredible output", icon: "📊", unlocked: false, category: .volume),
+        Achievement(title: "Code Machine", description: "Unstoppable force", icon: "📊", unlocked: false, category: .volume),
+        
+        // Daily Pattern Achievements ⏰ (8 total)
+        Achievement(title: "Early Bird", description: "Code before the world wakes up", icon: "🌅", unlocked: false, category: .dailyPatterns),
+        Achievement(title: "Morning Person", description: "Start the day with code", icon: "☀️", unlocked: false, category: .dailyPatterns),
+        Achievement(title: "Lunch Coder", description: "Productive lunch breaks", icon: "🍽️", unlocked: false, category: .dailyPatterns),
+        Achievement(title: "Afternoon Warrior", description: "Steady afternoon work", icon: "☁️", unlocked: false, category: .dailyPatterns),
+        Achievement(title: "Evening Developer", description: "After-hours dedication", icon: "🌆", unlocked: false, category: .dailyPatterns),
+        Achievement(title: "Night Owl", description: "Burning the midnight oil", icon: "🦉", unlocked: false, category: .dailyPatterns),
+        Achievement(title: "All-Day All-Night", description: "Commits in all 4 time periods", icon: "⏰", unlocked: false, category: .dailyPatterns),
+        Achievement(title: "Round the Clock", description: "24-hour coding marathon", icon: "🕛", unlocked: false, category: .dailyPatterns),
+        
+        // Weekly Pattern Achievements 📅 (6 total)
+        Achievement(title: "Weekend Warrior", description: "No rest for the committed", icon: "🛡️", unlocked: false, category: .weeklyPatterns),
+        Achievement(title: "Weekday Hero", description: "Professional dedication", icon: "💼", unlocked: false, category: .weeklyPatterns),
+        Achievement(title: "Perfect Week", description: "Every single day", icon: "✨", unlocked: false, category: .weeklyPatterns),
+        Achievement(title: "Monday Motivator", description: "Start the week strong", icon: "💪", unlocked: false, category: .weeklyPatterns),
+        Achievement(title: "Friday Finisher", description: "End the week right", icon: "🎯", unlocked: false, category: .weeklyPatterns),
+        Achievement(title: "Hump Day Helper", description: "Wednesday productivity", icon: "🐪", unlocked: false, category: .weeklyPatterns),
+        
+        // Code Impact Achievements 💥 (8 total)
+        Achievement(title: "First Impact", description: "Your first code changes", icon: "💥", unlocked: false, category: .codeImpact),
+        Achievement(title: "Small Changes", description: "Steady improvements", icon: "🔧", unlocked: false, category: .codeImpact),
+        Achievement(title: "Code Builder", description: "Significant contributions", icon: "🏗️", unlocked: false, category: .codeImpact),
+        Achievement(title: "Major Contributor", description: "Substantial impact", icon: "🌟", unlocked: false, category: .codeImpact),
+        Achievement(title: "Code Architect", description: "Massive contributions", icon: "🏛️", unlocked: false, category: .codeImpact),
+        Achievement(title: "Legacy Creator", description: "Epic scale development", icon: "🏆", unlocked: false, category: .codeImpact),
+        Achievement(title: "Refactor Master", description: "Clean up specialist", icon: "🧹", unlocked: false, category: .codeImpact),
+        Achievement(title: "Efficiency Expert", description: "Balanced changes", icon: "⚖️", unlocked: false, category: .codeImpact),
+        
+        // Repository Diversity 🏗️ (5 total)
+        Achievement(title: "Multi-Tasker", description: "Juggling projects", icon: "🤹", unlocked: false, category: .repositoryDiversity),
+        Achievement(title: "Project Hopper", description: "Diverse contributions", icon: "🦘", unlocked: false, category: .repositoryDiversity),
+        Achievement(title: "Polyglot", description: "Many languages, one coder", icon: "🌍", unlocked: false, category: .repositoryDiversity),
+        Achievement(title: "Portfolio Builder", description: "Broad experience", icon: "📁", unlocked: false, category: .repositoryDiversity),
+        Achievement(title: "Open Source Hero", description: "Community contributor", icon: "🌟", unlocked: false, category: .repositoryDiversity),
+        
+        // Special Milestones 🎯 (8 total)
+        Achievement(title: "Speed Runner", description: "Lightning fast development", icon: "⚡", unlocked: false, category: .specialMilestones),
+        Achievement(title: "Marathon Coder", description: "Extended coding session", icon: "🏃", unlocked: false, category: .specialMilestones),
+        Achievement(title: "Commit Storm", description: "Intense productivity", icon: "⛈️", unlocked: false, category: .specialMilestones),
+        Achievement(title: "Message Master", description: "Descriptive commits", icon: "✍️", unlocked: false, category: .specialMilestones),
+        Achievement(title: "Consistency King", description: "Steady as a rock", icon: "👑", unlocked: false, category: .specialMilestones),
+        Achievement(title: "Streak Saver", description: "Never give up", icon: "🛡️", unlocked: false, category: .specialMilestones),
+        Achievement(title: "New Year Coder", description: "Start the year right", icon: "🎊", unlocked: false, category: .specialMilestones),
+        Achievement(title: "Birthday Coder", description: "Code on your special day", icon: "🎂", unlocked: false, category: .specialMilestones)
     ]
     
     @Published var totalAchievementXP: Int = 0
@@ -819,9 +880,26 @@ class GitStreakDataModel: ObservableObject {
             WeeklyData(day: "Sun", commits: 7, active: true)
         ]
         
-        achievements[0] = Achievement(title: "First Commit", description: "Make your first commit", icon: "🌱", unlocked: true, category: .streaks)
-        achievements[1] = Achievement(title: "Week Warrior", description: "7 day streak", icon: "🔥", unlocked: true, category: .streaks)
-        achievements[2] = Achievement(title: "Early Bird", description: "Commit before 9 AM", icon: "🌅", unlocked: true, category: .dailyPatterns)
+        // Unlock some demo achievements from different categories
+        for i in 0..<achievements.count {
+            let achievement = achievements[i]
+            switch achievement.title {
+            case "First Flame":
+                achievements[i] = Achievement(title: achievement.title, description: achievement.description, icon: achievement.icon, unlocked: true, category: achievement.category)
+            case "Week Warrior":
+                achievements[i] = Achievement(title: achievement.title, description: achievement.description, icon: achievement.icon, unlocked: true, category: achievement.category)
+            case "First Steps":
+                achievements[i] = Achievement(title: achievement.title, description: achievement.description, icon: achievement.icon, unlocked: true, category: achievement.category)
+            case "Getting Started":
+                achievements[i] = Achievement(title: achievement.title, description: achievement.description, icon: achievement.icon, unlocked: true, category: achievement.category)
+            case "Early Bird":
+                achievements[i] = Achievement(title: achievement.title, description: achievement.description, icon: achievement.icon, unlocked: true, category: achievement.category)
+            case "First Impact":
+                achievements[i] = Achievement(title: achievement.title, description: achievement.description, icon: achievement.icon, unlocked: true, category: achievement.category)
+            default:
+                break
+            }
+        }
         
         updateAchievementStats()
     }
