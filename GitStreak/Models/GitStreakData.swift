@@ -695,4 +695,5 @@ class GitStreakDataModel: ObservableObject {
             loadMockData()
         }
     }
+    
 }
