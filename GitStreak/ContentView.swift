@@ -838,134 +838,7 @@ struct AchievementCategoryView: View {
         return Double(unlockedCount) / Double(achievements.count)
     }
     
-    private func getVisibleAchievements(for categoryAchievements: [Achievement]) -> [Achievement] {
-        var visibleAchievements: [Achievement] = []
-        
-        // Show unlocked achievements first (limit to 3 max)
-        let unlockedAchievements = categoryAchievements.filter { $0.unlocked }
-        let displayedUnlocked = Array(unlockedAchievements.prefix(3))
-        visibleAchievements.append(contentsOf: displayedUnlocked)
-        
-        // Calculate remaining slots (max 3 total)
-        let remainingSlots = max(0, 3 - displayedUnlocked.count)
-        
-        // Show next achievable ones based on remaining slots
-        if remainingSlots > 0 {
-            let lockedAchievements = categoryAchievements.filter { !$0.unlocked }
-            let nextAchievements = getNextAchievableAchievements(from: lockedAchievements, category: self.category, maxCount: remainingSlots)
-            visibleAchievements.append(contentsOf: nextAchievements)
-        }
-        
-        return visibleAchievements
-    }
-    
-    private func getNextAchievableAchievements(from lockedAchievements: [Achievement], category: AchievementCategory, maxCount: Int) -> [Achievement] {
-        // Get current user stats to determine next logical achievements
-        let currentStreak = dataModel.currentStreak
-        let weeklyCommits = dataModel.totalCommitsThisWeek
-        let currentXP = dataModel.xp
-        
-        // Sort locked achievements by difficulty/requirement to show most achievable first
-        let sortedAchievements = lockedAchievements.sorted { first, second in
-            // Sort by XP value (assuming lower XP = easier/next logical step)
-            getAchievementXP(for: first.title) < getAchievementXP(for: second.title)
-        }
-        
-        // Determine ideal count based on category and user progress, but respect maxCount limit
-        let idealCount: Int
-        switch category {
-        case .streaks:
-            idealCount = currentStreak == 0 ? 1 : 2
-            
-        case .volume:
-            idealCount = weeklyCommits < 10 ? 1 : 2
-            
-        case .dailyPatterns:
-            idealCount = 3
-            
-        case .weeklyPatterns:
-            idealCount = 2
-            
-        case .codeImpact:
-            idealCount = currentXP < 500 ? 1 : 2
-            
-        case .repositoryDiversity:
-            idealCount = 2
-            
-        case .specialMilestones:
-            idealCount = currentXP < 1000 ? 1 : 2
-        }
-        
-        let finalCount = min(idealCount, maxCount)
-        return Array(sortedAchievements.prefix(finalCount))
-    }
-    
-    private func getAchievementXP(for title: String) -> Int {
-        // Map achievement titles to their XP values for sorting
-        switch title {
-        // Streak achievements (25-500 XP)
-        case "First Flame": return 25
-        case "Getting Warmed Up": return 50
-        case "Week Warrior": return 100
-        case "Fortnight Fighter": return 200
-        case "Monthly Master": return 350
-        case "Quarter Champion": return 500
-        case "Semester Superstar": return 750
-        case "Annual Achiever": return 1000
-        case "Eternal Flame": return 2000
-        
-        // Volume achievements (25-400 XP)
-        case "First Steps": return 25
-        case "Getting Started": return 50
-        case "Century Club": return 100
-        case "Volume Champion": return 200
-        case "Commit Crusher": return 300
-        case "Thousand Club": return 400
-        
-        // Daily pattern achievements (75-350 XP)
-        case "Early Bird": return 75
-        case "Night Owl": return 75
-        case "Consistent Coder": return 150
-        case "Daily Devotion": return 200
-        case "Perfect Week": return 300
-        case "Unstoppable": return 350
-        
-        // Weekly pattern achievements (100-400 XP)
-        case "Weekend Warrior": return 100
-        case "Weekday Hero": return 100
-        case "Balanced Builder": return 200
-        case "Steady Pace": return 300
-        case "Weekly Wonder": return 400
-        
-        // Code impact achievements (100-600 XP)
-        case "File Modifier": return 100
-        case "Multi-File Master": return 200
-        case "Repository Ruler": return 300
-        case "Code Architect": return 400
-        case "Impact Legend": return 500
-        case "Change Champion": return 600
-        
-        // Repository diversity achievements (150-500 XP)
-        case "Explorer": return 150
-        case "Multi-Talented": return 250
-        case "Language Learner": return 300
-        case "Polyglot Programmer": return 400
-        case "Diversity Champion": return 500
-        
-        // Special milestones (200-1500 XP)
-        case "First Year": return 200
-        case "Dedication Award": return 400
-        case "Consistency King": return 600
-        case "Milestone Master": return 800
-        case "Achievement Hunter (10 total)": return 300
-        case "Achievement Hunter (25 total)": return 600
-        case "Achievement Hunter (50 total)": return 1000
-        case "Achievement Hunter (75 total)": return 1200
-        case "Ultimate Achiever": return 1500
-        
-        default: return 999 // Unknown achievements get high value (shown last)
-        }
-    }
+    // Filtering methods removed - Awards tab shows ALL achievements
     
     var body: some View {
         VStack(spacing: 0) {
@@ -1021,10 +894,10 @@ struct AchievementCategoryView: View {
             }
             .buttonStyle(PlainButtonStyle())
             
-            // Achievement Cards (when expanded) - Only show unlocked + next achievable
+            // Achievement Cards (when expanded) - Show ALL achievements in Awards tab
             if isExpanded {
                 VStack(spacing: 8) {
-                    ForEach(getVisibleAchievements(for: achievements)) { achievement in
+                    ForEach(achievements) { achievement in
                         SimpleAchievementCardView(achievement: achievement)
                     }
                 }
