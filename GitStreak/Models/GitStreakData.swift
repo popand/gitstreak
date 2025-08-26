@@ -187,8 +187,7 @@ class GitHubService: ObservableObject {
         
         // Sort by commit date
         allCommits.sort { commit1, commit2 in
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX"
+            let dateFormatter = ISO8601DateFormatter()
             
             guard let date1 = dateFormatter.date(from: commit1.commit.committer.date),
                   let date2 = dateFormatter.date(from: commit2.commit.committer.date) else {
@@ -237,23 +236,13 @@ class GitHubService: ObservableObject {
             print("✅ Found \(repositoryCommits.count) commits in \(repo)")
             
             // Fetch detailed stats for the first 5 commits only (to avoid rate limits)
-            // This gives us some stats without overwhelming the API
             let commitsWithStats = await withTaskGroup(of: GitHubCommit?.self) { group in
-                var results: [GitHubCommit] = []
-                
+                // Add tasks for first 5 commits to get detailed stats
                 for (index, repoCommit) in repositoryCommits.enumerated() {
-                    if index < 5 { // Only fetch stats for first 5 commits per repo
+                    if index < 5 {
                         group.addTask {
                             return await self.fetchCommitWithStats(owner: owner, repo: repo, sha: repoCommit.sha, baseCommit: repoCommit)
                         }
-                    } else {
-                        // For remaining commits, use without stats
-                        results.append(GitHubCommit(
-                            sha: repoCommit.sha,
-                            commit: repoCommit.commit,
-                            repository: Repository(name: repo, owner: nil),
-                            stats: nil
-                        ))
                     }
                 }
                 
@@ -265,24 +254,20 @@ class GitHubService: ObservableObject {
                     }
                 }
                 
-                // Combine stats results with non-stats results in original order
+                // Create final results - simpler and safer approach
                 var finalResults: [GitHubCommit] = []
-                for (index, repoCommit) in repositoryCommits.enumerated() {
-                    if index < 5 {
-                        // Find the matching commit with stats
-                        if let commitWithStats = statsResults.first(where: { $0.sha == repoCommit.sha }) {
-                            finalResults.append(commitWithStats)
-                        } else {
-                            // Fallback if stats fetch failed
-                            finalResults.append(GitHubCommit(
-                                sha: repoCommit.sha,
-                                commit: repoCommit.commit,
-                                repository: Repository(name: repo, owner: nil),
-                                stats: nil
-                            ))
-                        }
+                for (_, repoCommit) in repositoryCommits.enumerated() {
+                    if let commitWithStats = statsResults.first(where: { $0.sha == repoCommit.sha }) {
+                        // Use commit with stats if available
+                        finalResults.append(commitWithStats)
                     } else {
-                        finalResults.append(results[index - 5])
+                        // Fallback for all commits without stats (either failed fetch or not attempted)
+                        finalResults.append(GitHubCommit(
+                            sha: repoCommit.sha,
+                            commit: repoCommit.commit,
+                            repository: Repository(name: repo, owner: nil),
+                            stats: nil
+                        ))
                     }
                 }
                 
@@ -343,9 +328,7 @@ class GitHubService: ObservableObject {
         let commits = try await fetchUserCommits()
         
         var weeklyCommits: [String: Int] = [:]
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        let dateFormatter = ISO8601DateFormatter()
         
         let dayFormatter = DateFormatter()
         dayFormatter.dateFormat = "EEE"
@@ -430,9 +413,7 @@ class GitHubService: ObservableObject {
         guard !commits.isEmpty else { return 0 }
         
         // Parse commit dates and convert to local timezone
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        let dateFormatter = ISO8601DateFormatter()
         
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
@@ -471,9 +452,7 @@ class GitHubService: ObservableObject {
         guard !commits.isEmpty else { return 0 }
         
         // Parse commit dates and convert to local timezone
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        let dateFormatter = ISO8601DateFormatter()
         
         let calendar = Calendar.current
         
@@ -512,9 +491,7 @@ class GitHubService: ObservableObject {
     }
     
     private func formatRelativeTime(_ dateString: String) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX"
-        formatter.timeZone = TimeZone(identifier: "UTC")
+        let formatter = ISO8601DateFormatter()
         
         guard let date = formatter.date(from: dateString) else {
             print("❌ Failed to parse time string: '\(dateString)'")
