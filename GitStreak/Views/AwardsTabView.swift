@@ -137,28 +137,6 @@ struct AchievementSummaryView: View {
     }
 }
 
-struct StatCardView: View {
-    let title: String
-    let value: String
-    let color: Color
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.system(size: 12, weight: .medium))
-                .foregroundColor(.secondary)
-            
-            Text(value)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(color)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
-        .background(color.opacity(0.1))
-        .cornerRadius(12)
-    }
-}
-
 struct AchievementCategoryView: View {
     let category: AchievementCategory
     let achievements: [Achievement]

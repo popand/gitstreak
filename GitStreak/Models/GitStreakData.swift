@@ -975,16 +975,19 @@ class GitStreakDataModel: ObservableObject {
     }
     
     var monthlyGrowthPercentage: Int {
-        // Calculate growth based on recent commits vs historical pattern
-        let recentCommits = monthlyCommits.prefix(15).count
-        let olderCommits = monthlyCommits.dropFirst(15).count
+        guard monthlyCommits.count >= 14 else { return 0 }
         
-        if olderCommits > 0 {
-            let growth = ((Double(recentCommits) - Double(olderCommits)) / Double(olderCommits)) * 100
-            return Int(growth)
-        } else {
-            return 0
+        // Split month in half for comparison: recent half vs older half
+        let midPoint = monthlyCommits.count / 2
+        let recentCommitCount = monthlyCommits.prefix(midPoint).reduce(0) { $0 + $1.commits }
+        let olderCommitCount = monthlyCommits.dropFirst(midPoint).reduce(0) { $0 + $1.commits }
+        
+        guard olderCommitCount > 0 else { 
+            return recentCommitCount > 0 ? 100 : 0 
         }
+        
+        let growth = ((Double(recentCommitCount) - Double(olderCommitCount)) / Double(olderCommitCount)) * 100
+        return max(-100, min(999, Int(growth))) // Bound between -100% and 999%
     }
     
     var monthlyGrowthIsPositive: Bool {
