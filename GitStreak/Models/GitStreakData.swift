@@ -154,7 +154,7 @@ class GitHubService: ObservableObject {
             throw GitHubError.notAuthenticated
         }
         
-        guard let url = URL(string: "\(baseURL)/search/commits?q=author:\(username)&sort=committer-date&order=desc&per_page=100") else {
+        guard let url = URL(string: "\(baseURL)/search/commits?q=author:\(username)&sort=committer-date&order=desc&per_page=30") else {
             throw GitHubError.invalidURL
         }
         
@@ -170,7 +170,46 @@ class GitHubService: ObservableObject {
         }
         
         let searchResult = try JSONDecoder().decode(GitHubCommitSearchResult.self, from: data)
-        return searchResult.items
+        
+        // Fetch detailed stats for recent commits (limit to avoid rate limiting)
+        var commitsWithStats: [GitHubCommit] = []
+        for (index, commit) in searchResult.items.prefix(10).enumerated() {
+            if let detailedCommit = try? await fetchCommitDetails(
+                owner: commit.repository.owner?.login ?? username,
+                repo: commit.repository.name,
+                sha: commit.sha
+            ) {
+                commitsWithStats.append(detailedCommit)
+            } else {
+                commitsWithStats.append(commit)
+            }
+        }
+        
+        // Add remaining commits without detailed stats
+        commitsWithStats.append(contentsOf: searchResult.items.suffix(from: min(10, searchResult.items.count)))
+        
+        return commitsWithStats
+    }
+    
+    private func fetchCommitDetails(owner: String, repo: String, sha: String) async throws -> GitHubCommit? {
+        guard let token = accessToken else { return nil }
+        
+        guard let url = URL(string: "\(baseURL)/repos/\(owner)/\(repo)/commits/\(sha)") else {
+            return nil
+        }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200 else {
+            return nil
+        }
+        
+        return try? JSONDecoder().decode(GitHubCommit.self, from: data)
     }
     
     func fetchContributionStats() async throws -> ContributionStats {
@@ -229,8 +268,8 @@ class GitHubService: ObservableObject {
                     message: commit.commit.message,
                     time: formatRelativeTime(commit.commit.committer.date),
                     commits: 1,
-                    additions: nil,  // Real additions data requires fetching individual commit details
-                    deletions: nil   // Real deletions data requires fetching individual commit details
+                    additions: commit.stats?.additions,
+                    deletions: commit.stats?.deletions
                 )
             }
             return nil
@@ -387,11 +426,18 @@ struct GitHubCommit: Codable {
     let sha: String
     let commit: CommitDetail
     let repository: Repository
+    let stats: CommitStats?
 }
 
 struct CommitDetail: Codable {
     let message: String
     let committer: Committer
+}
+
+struct CommitStats: Codable {
+    let additions: Int?
+    let deletions: Int?
+    let total: Int?
 }
 
 struct Committer: Codable {
@@ -400,6 +446,11 @@ struct Committer: Codable {
 
 struct Repository: Codable {
     let name: String
+    let owner: RepositoryOwner?
+}
+
+struct RepositoryOwner: Codable {
+    let login: String
 }
 
 struct GitHubCommitSearchResult: Codable {

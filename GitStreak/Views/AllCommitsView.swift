@@ -10,12 +10,23 @@ struct AllCommitsView: View {
     }
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color(.systemGroupedBackground)
-                    .ignoresSafeArea()
-                
-                ScrollView {
+        if #available(iOS 16.0, *) {
+            NavigationStack {
+                commitListView
+            }
+        } else {
+            NavigationView {
+                commitListView
+            }
+        }
+    }
+    
+    private var commitListView: some View {
+        ZStack {
+            Color(.systemGroupedBackground)
+                .ignoresSafeArea()
+            
+            ScrollView {
                     LazyVStack(spacing: 20, pinnedViews: []) {
                         // Monthly Summary Card
                         VStack(alignment: .leading, spacing: 12) {
@@ -64,16 +75,15 @@ struct AllCommitsView: View {
                         .padding(.bottom, 24)
                     }
                 }
-            }
-            .navigationTitle("All Commits")
-            .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                    .fontWeight(.semibold)
+        }
+        .navigationTitle("All Commits")
+        .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Done") {
+                    dismiss()
                 }
+                .fontWeight(.semibold)
             }
         }
     }
