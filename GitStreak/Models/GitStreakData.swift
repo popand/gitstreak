@@ -953,4 +953,42 @@ class GitStreakDataModel: ObservableObject {
         }
     }
     
+    // MARK: - Computed Properties for Stats
+    
+    var mostActiveWeekDay: String {
+        let dayMapping = ["Mon": "Monday", "Tue": "Tuesday", "Wed": "Wednesday", 
+                         "Thu": "Thursday", "Fri": "Friday", "Sat": "Saturday", "Sun": "Sunday"]
+        
+        let mostActiveDay = weeklyData.max { $0.commits < $1.commits }?.day ?? "Monday"
+        return dayMapping[mostActiveDay] ?? "Monday"
+    }
+    
+    var dailyCommitAverage: Double {
+        let totalCommits = weeklyData.reduce(0) { $0 + $1.commits }
+        let activeDays = weeklyData.filter { $0.commits > 0 }.count
+        
+        if activeDays > 0 {
+            return Double(totalCommits) / Double(activeDays)
+        } else {
+            return 0.0
+        }
+    }
+    
+    var monthlyGrowthPercentage: Int {
+        // Calculate growth based on recent commits vs historical pattern
+        let recentCommits = monthlyCommits.prefix(15).count
+        let olderCommits = monthlyCommits.dropFirst(15).count
+        
+        if olderCommits > 0 {
+            let growth = ((Double(recentCommits) - Double(olderCommits)) / Double(olderCommits)) * 100
+            return Int(growth)
+        } else {
+            return 0
+        }
+    }
+    
+    var monthlyGrowthIsPositive: Bool {
+        return monthlyGrowthPercentage >= 0
+    }
+    
 }
