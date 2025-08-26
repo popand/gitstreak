@@ -791,9 +791,20 @@ class GitStreakDataModel: ObservableObject {
         Achievement(title: "Birthday Coder", description: "Code on your special day", icon: "🎂", unlocked: false, category: .specialMilestones)
     ]
     
-    @Published var totalAchievementXP: Int = 0
-    @Published var unlockedAchievementCount: Int = 0  
-    @Published var recentlyUnlockedAchievements: [Achievement] = []
+    // Achievement computed properties for better data integrity
+    var unlockedAchievementCount: Int {
+        achievements.filter { $0.unlocked }.count
+    }
+    
+    var totalAchievementXP: Int {
+        achievements.filter { $0.unlocked }
+            .map { AchievementXPHelper.getXP(for: $0.title) }
+            .reduce(0, +)
+    }
+    
+    var recentlyUnlockedAchievements: [Achievement] {
+        Array(achievements.filter { $0.unlocked }.suffix(5))
+    }
     
     private let gitHubService = GitHubService.shared
     
@@ -901,7 +912,7 @@ class GitStreakDataModel: ObservableObject {
             }
         }
         
-        updateAchievementStats()
+        // Achievement stats are now computed properties - no need to update manually
     }
     
     private func updateWeeklyData(from commits: [String: Int]) {
@@ -936,13 +947,7 @@ class GitStreakDataModel: ObservableObject {
     private func updateAchievements() {
         achievements[0] = Achievement(title: "First Commit", description: "Make your first commit", icon: "🌱", unlocked: !recentCommits.isEmpty, category: .streaks)
         achievements[1] = Achievement(title: "Week Warrior", description: "7 day streak", icon: "🔥", unlocked: currentStreak >= 7, category: .streaks)
-        updateAchievementStats()
-    }
-    
-    private func updateAchievementStats() {
-        unlockedAchievementCount = achievements.filter { $0.unlocked }.count
-        totalAchievementXP = unlockedAchievementCount * 100 // Simple XP calculation for demo
-        recentlyUnlockedAchievements = achievements.filter { $0.unlocked }
+        // Achievement stats are now computed properties - no need to update manually
     }
     
     func refreshData() {
@@ -953,4 +958,88 @@ class GitStreakDataModel: ObservableObject {
         }
     }
     
+}
+
+// MARK: - Achievement XP Helper
+enum AchievementXPHelper {
+    private static let xpValues: [String: Int] = [
+        // Streak achievements (25-2000 XP)
+        "First Flame": 25,
+        "Getting Warmed Up": 50,
+        "Week Warrior": 100,
+        "Fortnight Fighter": 200,
+        "Monthly Master": 350,
+        "Quarter Champion": 500,
+        "Half-Year Hero": 750,
+        "Annual Achiever": 1000,
+        "Legend Status": 2000,
+        
+        // Volume achievements (25-400 XP)
+        "First Steps": 25,
+        "Getting Started": 50,
+        "Century Club": 100,
+        "Half Grand": 200,
+        "Grand Master": 300,
+        "Mega Committer": 400,
+        "Ultra Producer": 500,
+        "Code Machine": 600,
+        
+        // Daily pattern achievements (75-350 XP)
+        "Early Bird": 75,
+        "Morning Person": 100,
+        "Lunch Coder": 125,
+        "Afternoon Warrior": 150,
+        "Evening Developer": 175,
+        "Night Owl": 200,
+        "All-Day All-Night": 300,
+        "Round the Clock": 350,
+        
+        // Weekly pattern achievements (100-400 XP)
+        "Weekend Warrior": 100,
+        "Weekday Hero": 100,
+        "Perfect Week": 300,
+        "Monday Motivator": 150,
+        "Friday Finisher": 150,
+        "Hump Day Helper": 125,
+        
+        // Code impact achievements (100-600 XP)
+        "First Impact": 100,
+        "Small Changes": 150,
+        "Code Builder": 200,
+        "Major Contributor": 300,
+        "Code Architect": 400,
+        "Legacy Creator": 500,
+        "Refactor Master": 350,
+        "Efficiency Expert": 275,
+        
+        // Repository diversity achievements (150-500 XP)
+        "Multi-Tasker": 150,
+        "Project Hopper": 200,
+        "Polyglot": 300,
+        "Repository Master": 400,
+        "Ecosystem Explorer": 500,
+        
+        // Special milestones (200-1500 XP)
+        "First Year": 200,
+        "Dedication Award": 400,
+        "Consistency King": 600,
+        "Milestone Master": 800,
+        "Achievement Hunter (10 total)": 300,
+        "Achievement Hunter (25 total)": 600,
+        "Achievement Hunter (50 total)": 1000,
+        "Achievement Hunter (75 total)": 1200,
+        "Ultimate Achiever": 1500,
+        "Holiday Spirit": 250,
+        "Valentine Coder": 225,
+        "April Fool": 175,
+        "Summer Coder": 200,
+        "Halloween Hacker": 275,
+        "Thanksgiving Thankful": 300,
+        "New Year Coder": 350,
+        "Birthday Coder": 400
+    ]
+    
+    static func getXP(for title: String) -> Int {
+        return xpValues[title] ?? 100 // Default XP for unknown achievements
+    }
 }
