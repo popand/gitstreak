@@ -219,6 +219,23 @@ class GitHubService: ObservableObject {
         let currentStreak = calculateCurrentStreak(commits: commits)
         let bestStreak = calculateBestStreak(commits: commits)
         
+        // Get all commits from the past 30 days for monthly view
+        let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: today) ?? today
+        let monthlyCommitData = commits.compactMap { commit -> CommitData? in
+            guard let commitDate = dateFormatter.date(from: commit.commit.committer.date) else { return nil }
+            if commitDate >= thirtyDaysAgo {
+                return CommitData(
+                    repo: commit.repository.name,
+                    message: commit.commit.message,
+                    time: formatRelativeTime(commit.commit.committer.date),
+                    commits: 1,
+                    additions: Int.random(in: 10...200),  // Mock additions for now
+                    deletions: Int.random(in: 5...50)     // Mock deletions for now
+                )
+            }
+            return nil
+        }
+        
         return ContributionStats(
             currentStreak: currentStreak,
             bestStreak: bestStreak,
@@ -230,7 +247,8 @@ class GitHubService: ObservableObject {
                     time: formatRelativeTime(commit.commit.committer.date),
                     commits: 1
                 )
-            }
+            },
+            monthlyCommits: monthlyCommitData
         )
     }
     
@@ -393,6 +411,7 @@ struct ContributionStats {
     let bestStreak: Int
     let weeklyCommits: [String: Int]
     let recentCommits: [CommitData]
+    let monthlyCommits: [CommitData]
 }
 
 enum GitHubError: Error, LocalizedError {
@@ -429,6 +448,8 @@ struct CommitData: Identifiable {
     let message: String
     let time: String
     let commits: Int
+    var additions: Int?
+    var deletions: Int?
 }
 
 struct WeeklyData: Identifiable {
@@ -459,6 +480,7 @@ class GitStreakDataModel: ObservableObject {
     @Published var errorMessage: String?
     
     @Published var recentCommits: [CommitData] = []
+    @Published var monthlyCommits: [CommitData] = []
     @Published var weeklyData: [WeeklyData] = [
         WeeklyData(day: "Mon", commits: 0, active: false),
         WeeklyData(day: "Tue", commits: 0, active: false),
@@ -497,6 +519,7 @@ class GitStreakDataModel: ObservableObject {
                     self.currentStreak = stats.currentStreak
                     self.bestStreak = stats.bestStreak
                     self.recentCommits = Array(stats.recentCommits)
+                    self.monthlyCommits = stats.monthlyCommits
                     self.updateWeeklyData(from: stats.weeklyCommits)
                     self.calculateLevel()
                     self.updateAchievements()
@@ -527,6 +550,25 @@ class GitStreakDataModel: ObservableObject {
             CommitData(repo: "my-portfolio", message: "Update homepage design", time: "2h ago", commits: 3),
             CommitData(repo: "react-components", message: "Add new button variants", time: "5h ago", commits: 2),
             CommitData(repo: "api-server", message: "Fix authentication bug", time: "1d ago", commits: 1)
+        ]
+        
+        // Generate mock monthly commits
+        monthlyCommits = [
+            CommitData(repo: "gitstreak", message: "Add .claude to .gitignore for improved file management", time: "3d ago", commits: 1, additions: 15, deletions: 2),
+            CommitData(repo: "my-portfolio", message: "Update homepage design", time: "2h ago", commits: 3, additions: 124, deletions: 45),
+            CommitData(repo: "react-components", message: "Add new button variants", time: "5h ago", commits: 2, additions: 89, deletions: 12),
+            CommitData(repo: "api-server", message: "Fix authentication bug", time: "1d ago", commits: 1, additions: 34, deletions: 8),
+            CommitData(repo: "mobile-app", message: "Implement push notifications", time: "2d ago", commits: 4, additions: 256, deletions: 23),
+            CommitData(repo: "documentation", message: "Update API documentation", time: "3d ago", commits: 1, additions: 78, deletions: 15),
+            CommitData(repo: "backend-services", message: "Optimize database queries", time: "4d ago", commits: 2, additions: 167, deletions: 89),
+            CommitData(repo: "frontend-lib", message: "Add TypeScript definitions", time: "5d ago", commits: 3, additions: 234, deletions: 0),
+            CommitData(repo: "testing-suite", message: "Add integration tests", time: "6d ago", commits: 5, additions: 456, deletions: 34),
+            CommitData(repo: "cli-tools", message: "Refactor command parser", time: "7d ago", commits: 2, additions: 123, deletions: 78),
+            CommitData(repo: "data-pipeline", message: "Add data validation", time: "8d ago", commits: 3, additions: 289, deletions: 56),
+            CommitData(repo: "web-scraper", message: "Fix rate limiting issue", time: "9d ago", commits: 1, additions: 45, deletions: 12),
+            CommitData(repo: "analytics-dashboard", message: "Add new charts", time: "10d ago", commits: 4, additions: 378, deletions: 89),
+            CommitData(repo: "payment-service", message: "Implement Stripe webhook", time: "11d ago", commits: 2, additions: 234, deletions: 45),
+            CommitData(repo: "auth-module", message: "Add OAuth2 support", time: "12d ago", commits: 6, additions: 567, deletions: 123)
         ]
         
         weeklyData = [

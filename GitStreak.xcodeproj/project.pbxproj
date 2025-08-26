@@ -15,6 +15,7 @@
 		1A2B3C4D5E6F7G8H9I0J1K2V /* WeeklyActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K2W /* WeeklyActivityView.swift */; };
 		1A2B3C4D5E6F7G8H9I0J1K2X /* RecentActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K2Y /* RecentActivityView.swift */; };
 		1A2B3C4D5E6F7G8H9I0J1K2Z /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K30 /* AchievementsView.swift */; };
+		1A2B3C4D5E6F7G8H9I0J1K3A /* AllCommitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K3B /* AllCommitsView.swift */; };
 		1A2B3C4D5E6F7G8H9I0J1K31 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K32 /* TabBarView.swift */; };
 		1A2B3C4D5E6F7G8H9I0J1K33 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K34 /* Assets.xcassets */; };
 		1A2B3C4D5E6F7G8H9I0J1K35 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K36 /* Preview Assets.xcassets */; };
@@ -39,6 +40,7 @@
 		1A2B3C4D5E6F7G8H9I0J1K2W /* WeeklyActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyActivityView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K2Y /* RecentActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentActivityView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K30 /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F7G8H9I0J1K3B /* AllCommitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCommitsView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K32 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K34 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K36 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				1A2B3C4D5E6F7G8H9I0J1K2W /* WeeklyActivityView.swift */,
 				1A2B3C4D5E6F7G8H9I0J1K2Y /* RecentActivityView.swift */,
 				1A2B3C4D5E6F7G8H9I0J1K30 /* AchievementsView.swift */,
+				1A2B3C4D5E6F7G8H9I0J1K3B /* AllCommitsView.swift */,
 				1A2B3C4D5E6F7G8H9I0J1K32 /* TabBarView.swift */,
 			);
 			path = Views;
@@ -240,6 +243,7 @@
 				1A2B3C4D5E6F7G8H9I0J1K2V /* WeeklyActivityView.swift in Sources */,
 				1A2B3C4D5E6F7G8H9I0J1K2X /* RecentActivityView.swift in Sources */,
 				1A2B3C4D5E6F7G8H9I0J1K2Z /* AchievementsView.swift in Sources */,
+				1A2B3C4D5E6F7G8H9I0J1K3A /* AllCommitsView.swift in Sources */,
 				1A2B3C4D5E6F7G8H9I0J1K31 /* TabBarView.swift in Sources */,
 				1A2B3C4D5E6F7G8H9I0J1K2L /* GitStreakApp.swift in Sources */,
 			);
