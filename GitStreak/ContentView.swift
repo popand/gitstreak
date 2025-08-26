@@ -13,7 +13,7 @@ struct ContentView: View {
                 if selectedTab == 0 {
                     HomeView(dataModel: dataModel)
                 } else if selectedTab == 1 {
-                    AwardsTabView(dataModel: dataModel)
+                    AwardsView(dataModel: dataModel)
                 } else if selectedTab == 2 {
                     StatsView(dataModel: dataModel)
                 } else {
