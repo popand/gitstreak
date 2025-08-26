@@ -4,6 +4,11 @@ struct AllCommitsView: View {
     @ObservedObject var dataModel: GitStreakDataModel
     @Environment(\.dismiss) private var dismiss
     
+    private var commitCountText: String {
+        let count = dataModel.monthlyCommits.count
+        return "\(count) \(count == 1 ? "commit" : "commits")"
+    }
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -25,7 +30,7 @@ struct AllCommitsView: View {
                                 
                                 Spacer()
                                 
-                                Text("\(dataModel.monthlyCommits.count) commits")
+                                Text(commitCountText)
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
