@@ -52,6 +52,7 @@ struct AllCommitsView: View {
             } else if let errorMessage = dataModel.errorMessage {
                 errorStateView(errorMessage)
             } else if dataModel.monthlyCommits.isEmpty {
+                let _ = print("🔍 AllCommitsView: monthlyCommits is empty (\(dataModel.monthlyCommits.count) commits)")
                 emptyStateView
             } else {
                 commitsContentView
@@ -320,16 +321,29 @@ struct CommitRowView: View {
                     .lineLimit(2)
                 
                 HStack(spacing: 12) {
-                    if let additions = commit.additions, additions > 0 {
-                        Label(formatNumber(additions), systemImage: "plus.circle.fill")
+                    if let additions = commit.additions, let deletions = commit.deletions {
+                        if additions > 0 || deletions > 0 {
+                            if additions > 0 {
+                                Label(formatNumber(additions), systemImage: "plus.circle.fill")
+                                    .font(.caption)
+                                    .foregroundColor(.green)
+                            }
+                            if deletions > 0 {
+                                Label(formatNumber(deletions), systemImage: "minus.circle.fill")
+                                    .font(.caption)
+                                    .foregroundColor(.red)
+                            }
+                        } else {
+                            // Show when we have stats but they're both 0
+                            Text("No changes")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    } else {
+                        // Show when we don't have stats data
+                        Text("Stats unavailable")
                             .font(.caption)
-                            .foregroundColor(.green)
-                    }
-                    
-                    if let deletions = commit.deletions, deletions > 0 {
-                        Label(formatNumber(deletions), systemImage: "minus.circle.fill")
-                            .font(.caption)
-                            .foregroundColor(.red)
+                            .foregroundColor(.secondary)
                     }
                     
                     Spacer()
