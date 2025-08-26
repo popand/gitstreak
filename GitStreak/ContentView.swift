@@ -819,8 +819,6 @@ struct AchievementCategoryView: View {
         return Double(unlockedCount) / Double(achievements.count)
     }
     
-    // Filtering methods removed - Awards tab shows ALL achievements
-    
     var body: some View {
         VStack(spacing: 0) {
             // Category Header
@@ -875,7 +873,7 @@ struct AchievementCategoryView: View {
             }
             .buttonStyle(PlainButtonStyle())
             
-            // Achievement Cards (when expanded) - Show ALL achievements in Awards tab
+            // Achievement Cards (when expanded)
             if isExpanded {
                 VStack(spacing: 8) {
                     ForEach(achievements) { achievement in
@@ -888,6 +886,7 @@ struct AchievementCategoryView: View {
     }
 }
 
+// Simple achievement card that doesn't conflict with existing AchievementCardView
 struct SimpleAchievementCardView: View {
     let achievement: Achievement
     
