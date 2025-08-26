@@ -9,6 +9,26 @@ struct AllCommitsView: View {
         return "\(count) \(count == 1 ? "commit" : "commits")"
     }
     
+    private func formatLargeNumber(_ number: Int) -> String {
+        if number >= 1000000 {
+            return String(format: "%.1fM", Double(number) / 1000000.0)
+        } else if number >= 1000 {
+            return String(format: "%.1fK", Double(number) / 1000.0)
+        }
+        return "\(number)"
+    }
+    
+    private func sanitizeCommitMessage(_ message: String) -> String {
+        return message
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "\n", with: " ")
+            .replacingOccurrences(of: "\r", with: " ")
+            .replacingOccurrences(of: "\t", with: " ")
+            .replacingOccurrences(of: "  ", with: " ") // Replace double spaces
+            .prefix(200)
+            .description
+    }
+    
     var body: some View {
         NavigationView {
             commitListView
@@ -236,7 +256,11 @@ struct AllCommitsView: View {
                 // Commits List - Using LazyVStack for better performance
                 LazyVStack(spacing: 0) {
                     ForEach(Array(dataModel.monthlyCommits.enumerated()), id: \.element.id) { index, commit in
-                        CommitRowView(commit: commit)
+                        CommitRowView(
+                            commit: commit,
+                            formatNumber: formatLargeNumber,
+                            sanitizeMessage: sanitizeCommitMessage
+                        )
                         
                         if index < dataModel.monthlyCommits.count - 1 {
                             Divider()
@@ -256,6 +280,8 @@ struct AllCommitsView: View {
 
 struct CommitRowView: View {
     let commit: CommitData
+    let formatNumber: (Int) -> String
+    let sanitizeMessage: (String) -> String
     
     // Pre-define gradient for better performance
     private let iconGradient = LinearGradient(
@@ -282,20 +308,20 @@ struct CommitRowView: View {
                     .font(.headline)
                     .foregroundColor(.primary)
                 
-                Text(commit.message)
+                Text(sanitizeMessage(commit.message))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .lineLimit(2)
                 
                 HStack(spacing: 12) {
-                    if let additions = commit.additions {
-                        Label("\(additions)", systemImage: "plus.circle.fill")
+                    if let additions = commit.additions, additions > 0 {
+                        Label(formatNumber(additions), systemImage: "plus.circle.fill")
                             .font(.caption)
                             .foregroundColor(.green)
                     }
                     
-                    if let deletions = commit.deletions {
-                        Label("\(deletions)", systemImage: "minus.circle.fill")
+                    if let deletions = commit.deletions, deletions > 0 {
+                        Label(formatNumber(deletions), systemImage: "minus.circle.fill")
                             .font(.caption)
                             .foregroundColor(.red)
                     }

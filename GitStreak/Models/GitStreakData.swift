@@ -623,6 +623,8 @@ class GitStreakDataModel: ObservableObject {
         // Generate mock monthly commits
         monthlyCommits = [
             CommitData(repo: "gitstreak", message: "Add .claude to .gitignore for improved file management", time: "3d ago", commits: 1, additions: 15, deletions: 2),
+            CommitData(repo: "large-refactor", message: "Major refactoring:\n- Updated all legacy components\n- Added new TypeScript definitions\n- Fixed multiple performance issues\n- Updated documentation", time: "1d ago", commits: 1, additions: 2500, deletions: 1200),
+            CommitData(repo: "data-migration", message: "Migrate database schema\n\nThis commit includes:\n\t- New table structures\n\t- Data migration scripts\n\t- Updated indexes", time: "2d ago", commits: 1, additions: 15000, deletions: 8500),
             CommitData(repo: "my-portfolio", message: "Update homepage design", time: "2h ago", commits: 3, additions: 124, deletions: 45),
             CommitData(repo: "react-components", message: "Add new button variants", time: "5h ago", commits: 2, additions: 89, deletions: 12),
             CommitData(repo: "api-server", message: "Fix authentication bug", time: "1d ago", commits: 1, additions: 34, deletions: 8),
