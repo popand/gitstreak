@@ -172,7 +172,6 @@ class GitHubService: ObservableObject {
         
         let repositories = try JSONDecoder().decode([GitHubRepository].self, from: reposData)
         
-        print("🔍 Checking repositories: \(repositories.prefix(5).map { $0.name }.joined(separator: ", "))")
         
         // Fetch commits from user's repositories with stats
         var allCommits: [GitHubCommit] = []
@@ -183,7 +182,6 @@ class GitHubService: ObservableObject {
             }
         }
         
-        print("📊 Total commits found: \(allCommits.count)")
         
         // Sort by commit date
         allCommits.sort { commit1, commit2 in
@@ -217,23 +215,16 @@ class GitHubService: ObservableObject {
         let (data, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
-            print("❌ No HTTP response for \(repo)")
             return nil
         }
         
-        print("📍 Fetching \(repo): Status \(httpResponse.statusCode)")
         
         guard httpResponse.statusCode == 200 else {
-            print("❌ Error \(httpResponse.statusCode) for \(repo)")
-            if let errorData = String(data: data, encoding: .utf8) {
-                print("Error response: \(errorData)")
-            }
             return nil
         }
         
         do {
             let repositoryCommits = try JSONDecoder().decode([RepositoryCommit].self, from: data)
-            print("✅ Found \(repositoryCommits.count) commits in \(repo)")
             
             // Fetch detailed stats for the first 5 commits only (to avoid rate limits)
             let commitsWithStats = await withTaskGroup(of: GitHubCommit?.self) { group in
@@ -276,7 +267,6 @@ class GitHubService: ObservableObject {
             
             return commitsWithStats
         } catch {
-            print("❌ JSON decode error for \(repo): \(error)")
             return nil
         }
     }
@@ -309,7 +299,6 @@ class GitHubService: ObservableObject {
                 stats: individualCommit.stats
             )
         } catch {
-            print("❌ Failed to fetch stats for commit \(sha): \(error)")
             // Return commit without stats as fallback
             return GitHubCommit(
                 sha: baseCommit.sha,
@@ -366,19 +355,15 @@ class GitHubService: ObservableObject {
         
         // Get all commits from the past 30 days for monthly view
         let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: today) ?? today
-        print("📅 Date filter: thirtyDaysAgo = \(thirtyDaysAgo), today = \(today)")
         
         let monthlyCommitData = commits.compactMap { commit -> CommitData? in
             guard let commitDate = dateFormatter.date(from: commit.commit.committer.date) else { 
-                print("❌ Failed to parse date: \(commit.commit.committer.date)")
                 return nil 
             }
             
-            print("🕐 Commit date: \(commitDate), is >= thirtyDaysAgo? \(commitDate >= thirtyDaysAgo)")
             
             if commitDate >= thirtyDaysAgo {
                 let timeString = formatRelativeTime(commit.commit.committer.date)
-                print("🕐 Formatting time for commit: '\(commit.commit.committer.date)' -> '\(timeString)'")
                 return CommitData(
                     repo: commit.repository.name,
                     message: commit.commit.message,
@@ -390,8 +375,6 @@ class GitHubService: ObservableObject {
             }
             return nil
         }
-        
-        print("📅 Monthly commits found: \(monthlyCommitData.count)")
         
         return ContributionStats(
             currentStreak: currentStreak,
@@ -522,7 +505,6 @@ class GitHubService: ObservableObject {
         let formatter = ISO8601DateFormatter()
         
         guard let date = formatter.date(from: dateString) else {
-            print("❌ Failed to parse time string: '\(dateString)'")
             return "Unknown"
         }
         
@@ -1013,8 +995,7 @@ class GitStreakDataModel: ObservableObject {
     var monthlyGrowthPercentage: Int {
         guard monthlyCommits.count >= 2 else { return 0 }
         
-        // For now, since we have string time values, use array position as proxy for recency
-        // TODO: In production, implement actual date parsing from commit timestamps for more accurate growth calculation
+        // Use array position as proxy for recency since commits are already ordered chronologically
         let totalCommits = monthlyCommits.reduce(0) { $0 + $1.commits }
         guard totalCommits > 0 else { return 0 }
         
