@@ -35,19 +35,43 @@ struct AwardsTabView: View {
                 
                 // Recent Achievements
                 if !dataModel.recentlyUnlockedAchievements.isEmpty {
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Recent Achievements")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(.primary)
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 12) {
-                                ForEach(dataModel.recentlyUnlockedAchievements.prefix(5)) { achievement in
-                                    CompactAchievementCardView(achievement: achievement)
-                                }
+                    VStack(spacing: 0) {
+                        // Recent Achievements Header
+                        HStack(spacing: 12) {
+                            // Icon with circular background
+                            ZStack {
+                                Circle()
+                                    .fill(Color(.systemGray5))
+                                    .frame(width: 40, height: 40)
+                                
+                                Image(systemName: "clock.arrow.circlepath")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .foregroundColor(.blue)
                             }
-                            .padding(.horizontal, 24)
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Recent Achievements")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                
+                                Text("\(dataModel.recentlyUnlockedAchievements.count) recently unlocked")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
                         }
+                        .padding(16)
+                        .background(Color(.systemBackground))
+                        .cornerRadius(12)
+                        
+                        // Recent Achievement Cards (matching expanded category structure)
+                        VStack(spacing: 8) {
+                            ForEach(dataModel.recentlyUnlockedAchievements.prefix(5)) { achievement in
+                                SimpleAchievementCardView(achievement: achievement)
+                            }
+                        }
+                        .padding(.top, 8)
                     }
                 }
             }

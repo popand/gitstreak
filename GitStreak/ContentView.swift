@@ -111,16 +111,18 @@ struct HomeView: View {
                 }
                 
                 // Achievements Section
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Achievements")
-                        .font(.system(size: 15, weight: .semibold))
-                        .padding(.horizontal, 20)
-                    
-                    AchievementsView(achievements: dataModel.achievements)
-                        .padding(.horizontal, 20)
+                if !dataModel.achievements.filter({ $0.unlocked }).isEmpty {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Achievements")
+                            .font(.system(size: 15, weight: .semibold))
+                            .padding(.horizontal, 20)
+                        
+                        AchievementsView(achievements: dataModel.achievements.filter { $0.unlocked })
+                            .padding(.horizontal, 20)
+                    }
                 }
-                .padding(.bottom, 20)
             }
+            .padding(.bottom, 20)
         }
         .sheet(isPresented: $showSettings) {
             SettingsView(dataModel: dataModel)
