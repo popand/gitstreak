@@ -1394,7 +1394,7 @@ struct PrivacyPolicyView: View {
                 VStack(alignment: .leading, spacing: 24) {
                     Group {
                         Section {
-                            Text("Last Updated: \(Date().formatted(date: .long, time: .omitted))")
+                            Text("Last Updated: August 27, 2025")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
@@ -1507,7 +1507,7 @@ struct TermsOfServiceView: View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    Text("Effective Date: \(Date().formatted(date: .long, time: .omitted))")
+                    Text("Effective Date: August 27, 2025")
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
