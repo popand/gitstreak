@@ -282,6 +282,19 @@ struct AllCommitsView: View {
                 .padding(.bottom, 24)
             }
         }
+        .refreshable {
+            await refreshData()
+        }
+    }
+    
+    private func refreshData() async {
+        // Add a small delay to show the refresh indicator
+        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+        
+        // Refresh the data
+        await MainActor.run {
+            dataModel.refreshData()
+        }
     }
 }
 
