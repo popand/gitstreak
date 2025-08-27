@@ -36,16 +36,6 @@ struct TabBarView: View {
             }
             
             Spacer()
-            
-            TabBarItem(
-                icon: "person.2",
-                title: "Social",
-                isSelected: selectedTab == 3
-            ) {
-                selectedTab = 3
-            }
-            
-            Spacer()
         }
         .padding(.vertical, 12)
         .background(

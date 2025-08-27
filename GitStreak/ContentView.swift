@@ -16,8 +16,6 @@ struct ContentView: View {
                     AwardsTabView(dataModel: dataModel)
                 } else if selectedTab == 2 {
                     StatsView(dataModel: dataModel)
-                } else {
-                    SocialView(dataModel: dataModel)
                 }
                 
                 TabBarView(selectedTab: $selectedTab)
@@ -261,27 +259,6 @@ struct StatsView: View {
         }
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Statistics")
-    }
-}
-
-struct SocialView: View {
-    @ObservedObject var dataModel: GitStreakDataModel
-    
-    var body: some View {
-        VStack {
-            Text("Social")
-                .font(.title2)
-                .fontWeight(.bold)
-                .padding()
-            
-            Spacer()
-            
-            Text("Coming Soon")
-                .font(.headline)
-                .foregroundColor(.secondary)
-            
-            Spacer()
-        }
     }
 }
 
