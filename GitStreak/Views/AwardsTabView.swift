@@ -78,8 +78,21 @@ struct AwardsTabView: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 20)
         }
+        .refreshable {
+            await refreshData()
+        }
         .navigationTitle("Awards")
         .background(Color(.systemGroupedBackground))
+    }
+    
+    private func refreshData() async {
+        // Add a small delay to show the refresh indicator
+        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+        
+        // Refresh the data
+        await MainActor.run {
+            dataModel.refreshData()
+        }
     }
 }
 

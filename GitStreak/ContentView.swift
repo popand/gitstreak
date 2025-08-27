@@ -124,11 +124,24 @@ struct HomeView: View {
             }
             .padding(.bottom, 20)
         }
+        .refreshable {
+            await refreshData()
+        }
         .sheet(isPresented: $showSettings) {
             SettingsView(dataModel: dataModel)
         }
         .sheet(isPresented: $showAllCommits) {
             AllCommitsView(dataModel: dataModel)
+        }
+    }
+    
+    private func refreshData() async {
+        // Add a small delay to show the refresh indicator
+        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+        
+        // Refresh the data
+        await MainActor.run {
+            dataModel.refreshData()
         }
     }
     
@@ -259,8 +272,21 @@ struct StatsView: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 20)
         }
+        .refreshable {
+            await refreshData()
+        }
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Statistics")
+    }
+    
+    private func refreshData() async {
+        // Add a small delay to show the refresh indicator
+        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+        
+        // Refresh the data
+        await MainActor.run {
+            dataModel.refreshData()
+        }
     }
 }
 
