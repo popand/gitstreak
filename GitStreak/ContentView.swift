@@ -161,20 +161,106 @@ struct StatsView: View {
     @ObservedObject var dataModel: GitStreakDataModel
     
     var body: some View {
-        VStack {
-            Text("Statistics")
-                .font(.title2)
-                .fontWeight(.bold)
-                .padding()
-            
-            Spacer()
-            
-            Text("Coming Soon")
-                .font(.headline)
-                .foregroundColor(.secondary)
-            
-            Spacer()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                // Activity Overview Section
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Activity Overview")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.primary)
+                    
+                    // Main Activity Card
+                    StreakStatsCardView(dataModel: dataModel)
+                    
+                    // Supporting Cards
+                    HStack(spacing: 16) {
+                        StatCardView(
+                            title: "This Week",
+                            value: "\(dataModel.totalCommitsThisWeek)",
+                            color: .green
+                        )
+                        
+                        StatCardView(
+                            title: "Best Streak",
+                            value: "\(dataModel.bestStreak) days",
+                            color: .blue
+                        )
+                    }
+                }
+                
+                // Achievement Progress Section
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Achievement Progress")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.primary)
+                    
+                    // Achievement Summary
+                    AchievementStatsCardView(dataModel: dataModel)
+                    
+                    // Recent Achievements
+                    if !dataModel.recentlyUnlockedAchievements.isEmpty {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Recent Unlocks")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.primary)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 12) {
+                                    ForEach(dataModel.recentlyUnlockedAchievements.prefix(5)) { achievement in
+                                        CompactAchievementCardView(achievement: achievement)
+                                    }
+                                }
+                                .padding(.leading, 0)
+                            }
+                        }
+                    }
+                }
+                
+                // Personal Insights Section
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Personal Insights")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.primary)
+                    
+                    VStack(spacing: 16) {
+                        // Top row - 2 cards
+                        HStack(spacing: 16) {
+                            StatCardView(
+                                title: "Most Active Day",
+                                value: dataModel.mostActiveWeekDay.isEmpty ? "N/A" : dataModel.mostActiveWeekDay,
+                                color: .blue
+                            )
+                            
+                            StatCardView(
+                                title: "Daily Average", 
+                                value: dataModel.dailyCommitAverage.isFinite ? String(format: "%.1f", dataModel.dailyCommitAverage) : "N/A",
+                                color: .green
+                            )
+                        }
+                        
+                        // Bottom row - 1 card centered
+                        HStack(spacing: 16) {
+                            StatCardView(
+                                title: "Monthly Growth",
+                                value: dataModel.monthlyCommits.isEmpty ? "N/A" : (dataModel.monthlyGrowthPercentage > 0 ? "+\(dataModel.monthlyGrowthPercentage)%" : "\(dataModel.monthlyGrowthPercentage)%"),
+                                color: dataModel.monthlyCommits.isEmpty ? .gray : (dataModel.monthlyGrowthIsPositive ? .purple : .gray)
+                            )
+                            
+                            // Invisible spacer card to maintain alignment
+                            StatCardView(
+                                title: "Total Commits", 
+                                value: "\(dataModel.recentCommits.count)",
+                                color: .orange
+                            )
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 20)
         }
+        .background(Color(.systemGroupedBackground))
+        .navigationTitle("Statistics")
     }
 }
 
@@ -703,6 +789,162 @@ struct AwardsTabView: View {
     }
 }
 
+// MARK: - Custom Components for Stats
+
+struct StreakStatsCardView: View {
+    @ObservedObject var dataModel: GitStreakDataModel
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Current Status")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white.opacity(0.95))
+                
+                HStack(alignment: .bottom, spacing: 8) {
+                    Text("\(dataModel.currentStreak)")
+                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                    
+                    Text("day streak")
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundColor(.white.opacity(0.9))
+                        .padding(.bottom, 8)
+                }
+            }
+            
+            Divider()
+                .background(.white.opacity(0.3))
+            
+            HStack(spacing: 24) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Weekly Commits")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.white.opacity(0.8))
+                    
+                    Text("\(dataModel.totalCommitsThisWeek)")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(.white)
+                }
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Level Progress")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.white.opacity(0.8))
+                    
+                    HStack(spacing: 4) {
+                        Text("Level \(dataModel.level)")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.white)
+                        
+                        Text("(\(Int(dataModel.progress * 100))%)")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.white.opacity(0.9))
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 24)
+        .padding(.vertical, 28)
+        .background(
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color(red: 0.2, green: 0.8, blue: 0.4),
+                    Color(red: 0.3, green: 0.5, blue: 0.9),
+                    Color(red: 0.6, green: 0.3, blue: 0.9)
+                ]),
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+        )
+        .cornerRadius(20)
+        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 4)
+    }
+}
+
+struct AchievementStatsCardView: View {
+    @ObservedObject var dataModel: GitStreakDataModel
+    
+    private var totalAchievements: Int {
+        dataModel.achievements.count
+    }
+    
+    private var nextMilestone: String {
+        let unlocked = dataModel.unlockedAchievementCount
+        let nextTargets = [10, 25, 50, 75, 100]
+        
+        for target in nextTargets {
+            if unlocked < target {
+                return "Achievement Hunter (\(target) total)"
+            }
+        }
+        return "All achievements unlocked!"
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 16) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Achievements")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.secondary)
+                    
+                    Text("\(dataModel.unlockedAchievementCount)/\(totalAchievements)")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(.green)
+                }
+                
+                Spacer()
+                
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("Bonus XP")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.secondary)
+                    
+                    Text("\(dataModel.totalAchievementXP)")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(.blue)
+                }
+            }
+            
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text("Next Milestone")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.secondary)
+                    
+                    Spacer()
+                    
+                    Text(nextMilestone)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.primary)
+                }
+                
+                ProgressView(value: milestoneProgress)
+                    .progressViewStyle(LinearProgressViewStyle())
+                    .accentColor(.blue)
+            }
+        }
+        .padding(20)
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+    }
+    
+    private var milestoneProgress: Double {
+        let unlocked = dataModel.unlockedAchievementCount
+        let nextTargets = [10, 25, 50, 75, 100]
+        
+        for target in nextTargets {
+            if unlocked < target {
+                return Double(unlocked) / Double(target)
+            }
+        }
+        return 1.0
+    }
+}
+
 struct AchievementSummaryView: View {
     @ObservedObject var dataModel: GitStreakDataModel
     
@@ -780,6 +1022,9 @@ struct AchievementSummaryView: View {
         .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
 }
+
+
+// MARK: - Shared Components
 
 struct StatCardView: View {
     let title: String
@@ -886,7 +1131,6 @@ struct AchievementCategoryView: View {
     }
 }
 
-// Simple achievement card that doesn't conflict with existing AchievementCardView
 struct SimpleAchievementCardView: View {
     let achievement: Achievement
     

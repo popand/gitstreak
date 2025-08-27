@@ -319,6 +319,139 @@ class GitStreakDataModelTests: XCTestCase {
         XCTAssertGreaterThan(unlockedAchievements.count, 0, "Mock data should have some unlocked achievements")
     }
     
+    // MARK: - Enhanced Coverage Tests
+    
+    func testMostActiveWeekDay_WithEmptyData() {
+        // Test mostActiveWeekDay when all days have 0 commits
+        let emptyWeeklyData = [
+            WeeklyData(day: "Mon", commits: 0, active: false),
+            WeeklyData(day: "Tue", commits: 0, active: false),
+            WeeklyData(day: "Wed", commits: 0, active: false),
+            WeeklyData(day: "Thu", commits: 0, active: false),
+            WeeklyData(day: "Fri", commits: 0, active: false),
+            WeeklyData(day: "Sat", commits: 0, active: false),
+            WeeklyData(day: "Sun", commits: 0, active: false)
+        ]
+        
+        dataModel.weeklyData = emptyWeeklyData
+        
+        let mostActiveDay = dataModel.mostActiveWeekDay
+        XCTAssertEqual(mostActiveDay, "", "Most active day should be empty string when no commits exist")
+        
+        // Test with single commit
+        dataModel.weeklyData[2] = WeeklyData(day: "Wed", commits: 1, active: true) // Wednesday
+        let singleCommitDay = dataModel.mostActiveWeekDay
+        XCTAssertEqual(singleCommitDay, "Wednesday", "Should return Wednesday when only Wednesday has commits")
+        
+        // Test with tied commits (should return first one encountered with max commits)
+        dataModel.weeklyData[0] = WeeklyData(day: "Mon", commits: 3, active: true)
+        dataModel.weeklyData[4] = WeeklyData(day: "Fri", commits: 3, active: true)
+        let tiedCommitsDay = dataModel.mostActiveWeekDay
+        XCTAssertTrue(tiedCommitsDay == "Monday" || tiedCommitsDay == "Friday", "Should return one of the tied days")
+    }
+    
+    func testDailyCommitAverage_WithMixedData() {
+        // Test with mixed active/inactive days
+        let mixedWeeklyData = [
+            WeeklyData(day: "Mon", commits: 5, active: true),
+            WeeklyData(day: "Tue", commits: 0, active: false),
+            WeeklyData(day: "Wed", commits: 3, active: true),
+            WeeklyData(day: "Thu", commits: 0, active: false),
+            WeeklyData(day: "Fri", commits: 7, active: true),
+            WeeklyData(day: "Sat", commits: 0, active: false),
+            WeeklyData(day: "Sun", commits: 1, active: true)
+        ]
+        
+        dataModel.weeklyData = mixedWeeklyData
+        
+        let dailyAverage = dataModel.dailyCommitAverage
+        // Total commits: 5 + 3 + 7 + 1 = 16
+        // Active days: 4 (Mon, Wed, Fri, Sun)
+        // Expected average: 16 / 4 = 4.0
+        XCTAssertEqual(dailyAverage, 4.0, "Daily average should be 4.0 with mixed data")
+        
+        // Test with all active days
+        let allActiveData = mixedWeeklyData.map { WeeklyData(day: $0.day, commits: $0.commits, active: $0.commits > 0 || $0.commits == 0) }
+        dataModel.weeklyData = allActiveData.map { WeeklyData(day: $0.day, commits: max(1, $0.commits), active: true) }
+        
+        let allActiveAverage = dataModel.dailyCommitAverage
+        // Total commits: 5 + 1 + 3 + 1 + 7 + 1 + 1 = 19
+        // Active days: 7
+        // Expected average: 19 / 7 ≈ 2.71
+        XCTAssertEqual(allActiveAverage, 19.0 / 7.0, accuracy: 0.01, "Should calculate correctly with all active days")
+        
+        // Test with no active days
+        let noActiveData = Array(repeating: WeeklyData(day: "Mon", commits: 0, active: false), count: 7)
+        dataModel.weeklyData = noActiveData
+        let noActiveAverage = dataModel.dailyCommitAverage
+        XCTAssertEqual(noActiveAverage, 0.0, "Should return 0.0 when no days are active")
+    }
+    
+    func testMonthlyGrowthPercentage_EdgeCases() {
+        // Test with empty monthly commits
+        dataModel.monthlyCommits = []
+        XCTAssertEqual(dataModel.monthlyGrowthPercentage, 0, "Should return 0 for empty monthly commits")
+        
+        // Test with single commit
+        dataModel.monthlyCommits = [
+            CommitData(repo: "test", message: "Single commit", time: "1d ago", commits: 1)
+        ]
+        XCTAssertEqual(dataModel.monthlyGrowthPercentage, 0, "Should return 0 for single commit")
+        
+        // Test with two commits - equal distribution
+        dataModel.monthlyCommits = [
+            CommitData(repo: "test1", message: "Recent commit", time: "1d ago", commits: 5),
+            CommitData(repo: "test2", message: "Older commit", time: "15d ago", commits: 5)
+        ]
+        let equalGrowth = dataModel.monthlyGrowthPercentage
+        XCTAssertEqual(equalGrowth, 0, "Should return 0% growth for equal recent vs older commits")
+        
+        // Test with positive growth
+        dataModel.monthlyCommits = [
+            CommitData(repo: "test1", message: "Recent commit", time: "1d ago", commits: 10),
+            CommitData(repo: "test2", message: "Older commit", time: "15d ago", commits: 5)
+        ]
+        let positiveGrowth = dataModel.monthlyGrowthPercentage
+        XCTAssertEqual(positiveGrowth, 100, "Should return 100% growth: (10-5)/5 * 100 = 100%")
+        
+        // Test with negative growth
+        dataModel.monthlyCommits = [
+            CommitData(repo: "test1", message: "Recent commit", time: "1d ago", commits: 2),
+            CommitData(repo: "test2", message: "Older commit", time: "15d ago", commits: 8)
+        ]
+        let negativeGrowth = dataModel.monthlyGrowthPercentage
+        XCTAssertEqual(negativeGrowth, -75, "Should return -75% growth: (2-8)/8 * 100 = -75%")
+        
+        // Test with zero older commits (edge case)
+        dataModel.monthlyCommits = [
+            CommitData(repo: "test1", message: "Recent commit", time: "1d ago", commits: 5),
+            CommitData(repo: "test2", message: "Older commit", time: "15d ago", commits: 0)
+        ]
+        let zeroOlderGrowth = dataModel.monthlyGrowthPercentage
+        XCTAssertEqual(zeroOlderGrowth, 100, "Should return 100% growth when older period has no commits")
+        
+        // Test with bounds (very high growth should be capped)
+        dataModel.monthlyCommits = [
+            CommitData(repo: "test1", message: "Recent commit", time: "1d ago", commits: 1000),
+            CommitData(repo: "test2", message: "Older commit", time: "15d ago", commits: 1)
+        ]
+        let highGrowth = dataModel.monthlyGrowthPercentage
+        XCTAssertLessThanOrEqual(highGrowth, 999, "Growth should be capped at 999%")
+        
+        // Test monthlyGrowthIsPositive property
+        dataModel.monthlyCommits = [
+            CommitData(repo: "test1", message: "Recent commit", time: "1d ago", commits: 10),
+            CommitData(repo: "test2", message: "Older commit", time: "15d ago", commits: 5)
+        ]
+        XCTAssertTrue(dataModel.monthlyGrowthIsPositive, "Should be positive with positive growth")
+        
+        dataModel.monthlyCommits = [
+            CommitData(repo: "test1", message: "Recent commit", time: "1d ago", commits: 2),
+            CommitData(repo: "test2", message: "Older commit", time: "15d ago", commits: 8)
+        ]
+        XCTAssertFalse(dataModel.monthlyGrowthIsPositive, "Should be false with negative growth")
+    }
+
     // MARK: - Performance Tests
     
     func testDataModelPerformance() {
