@@ -262,7 +262,7 @@ struct StatsView: View {
                             // Invisible spacer card to maintain alignment
                             StatCardView(
                                 title: "Total Commits", 
-                                value: "\(dataModel.recentCommits.count)",
+                                value: "\(dataModel.totalLifetimeCommits)",
                                 color: .orange
                             )
                         }

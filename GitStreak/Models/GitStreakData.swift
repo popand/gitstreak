@@ -196,7 +196,7 @@ class GitHubService: ObservableObject {
             return date1 > date2
         }
         
-        return Array(allCommits.prefix(150)) // Allow more commits since we're filtering by date
+        return Array(allCommits.prefix(500)) // Allow more commits since we're filtering by date
     }
     
     private func fetchRepositoryCommits(owner: String, repo: String) async throws -> [GitHubCommit]? {
@@ -206,7 +206,7 @@ class GitHubService: ObservableObject {
         let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
         let sinceDate = ISO8601DateFormatter().string(from: thirtyDaysAgo)
         
-        guard let url = URL(string: "\(baseURL)/repos/\(owner)/\(repo)/commits?since=\(sinceDate)&per_page=30") else {
+        guard let url = URL(string: "\(baseURL)/repos/\(owner)/\(repo)/commits?since=\(sinceDate)&per_page=100") else {
             return nil
         }
         
@@ -407,6 +407,34 @@ class GitHubService: ObservableObject {
             },
             monthlyCommits: monthlyCommitData
         )
+    }
+    
+    func fetchTotalCommitCount() async throws -> Int {
+        guard let token = accessToken, let username = username else {
+            throw GitHubError.notAuthenticated
+        }
+        
+        guard let url = URL(string: "\(baseURL)/search/commits?q=author:\(username)") else {
+            throw GitHubError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200 else {
+            throw GitHubError.requestFailed((response as? HTTPURLResponse)?.statusCode ?? 0)
+        }
+        
+        struct SearchResponse: Codable {
+            let total_count: Int
+        }
+        
+        let searchResponse = try JSONDecoder().decode(SearchResponse.self, from: data)
+        return searchResponse.total_count
     }
     
     private func calculateCurrentStreak(commits: [GitHubCommit]) -> Int {
@@ -708,6 +736,7 @@ class GitStreakDataModel: ObservableObject {
     @Published var progress: Double = 0.0
     @Published var xpToNext: Int = 100
     @Published var totalCommitsThisWeek: Int = 0
+    @Published var totalLifetimeCommits: Int = 0
     @Published var isLoading = false
     @Published var errorMessage: String?
     
@@ -811,12 +840,14 @@ class GitStreakDataModel: ObservableObject {
             
             do {
                 let stats = try await gitHubService.fetchContributionStats()
+                let totalCommits = try await gitHubService.fetchTotalCommitCount()
                 
                 await MainActor.run {
                     self.currentStreak = stats.currentStreak
                     self.bestStreak = stats.bestStreak
                     self.recentCommits = Array(stats.recentCommits)
                     self.monthlyCommits = stats.monthlyCommits
+                    self.totalLifetimeCommits = totalCommits
                     self.updateWeeklyData(from: stats.weeklyCommits)
                     self.calculateLevel()
                     self.updateAchievements()
@@ -842,6 +873,7 @@ class GitStreakDataModel: ObservableObject {
         progress = 0.85
         xpToNext = 353
         totalCommitsThisWeek = 21
+        totalLifetimeCommits = 1247
         
         recentCommits = [
             CommitData(repo: "my-portfolio", message: "Update homepage design", time: "2h ago", commits: 3),
