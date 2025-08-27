@@ -52,7 +52,6 @@ struct AllCommitsView: View {
             } else if let errorMessage = dataModel.errorMessage {
                 errorStateView(errorMessage)
             } else if dataModel.monthlyCommits.isEmpty {
-                let _ = print("🔍 AllCommitsView: monthlyCommits is empty (\(dataModel.monthlyCommits.count) commits)")
                 emptyStateView
             } else {
                 commitsContentView
