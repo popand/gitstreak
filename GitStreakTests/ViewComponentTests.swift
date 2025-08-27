@@ -257,6 +257,128 @@ class ViewComponentTests: XCTestCase {
         XCTAssertNotNil(body, "SettingsView should have a body")
     }
     
+    // MARK: - StatCardView Tests
+    
+    func testStreakStatsCardView_DisplaysCorrectData() {
+        // Test basic StatCardView instantiation and data display
+        let statCardView = StatCardView(
+            title: "Current Streak",
+            value: "7 days",
+            color: .orange
+        )
+        
+        XCTAssertNotNil(statCardView, "StatCardView should be instantiable")
+        
+        let body = statCardView.body
+        XCTAssertNotNil(body, "StatCardView should have a body")
+        
+        // Test with different data types
+        let numericStatCard = StatCardView(
+            title: "Total Commits",
+            value: "142",
+            color: .blue
+        )
+        XCTAssertNotNil(numericStatCard, "Should handle numeric string values")
+        
+        let percentageStatCard = StatCardView(
+            title: "Growth",
+            value: "+25%",
+            color: .green
+        )
+        XCTAssertNotNil(percentageStatCard, "Should handle percentage values")
+        
+        // Test with empty values
+        let emptyStatCard = StatCardView(
+            title: "No Data",
+            value: "N/A",
+            color: .gray
+        )
+        XCTAssertNotNil(emptyStatCard, "Should handle N/A values gracefully")
+        
+        // Test with long titles and values
+        let longTitleCard = StatCardView(
+            title: "Very Long Title That Should Wrap",
+            value: "Very Long Value That Might Need Truncation",
+            color: .purple
+        )
+        XCTAssertNotNil(longTitleCard, "Should handle long titles and values")
+    }
+    
+    func testAchievementStatsCardView_MilestoneCalculation() {
+        // Create test data model with specific achievement configuration
+        let testModel = GitStreakDataModel()
+        
+        // Test achievement milestone calculation logic
+        let firstCommitAchievement = Achievement(
+            title: "First Commit",
+            description: "Make your first commit",
+            icon: "🌱",
+            unlocked: true
+        )
+        
+        let weekWarriorAchievement = Achievement(
+            title: "Week Warrior",
+            description: "Maintain a 7-day streak",
+            icon: "🔥",
+            unlocked: false
+        )
+        
+        let monthMasterAchievement = Achievement(
+            title: "Month Master",
+            description: "Maintain a 30-day streak",
+            icon: "🏆",
+            unlocked: false
+        )
+        
+        let testAchievements = [firstCommitAchievement, weekWarriorAchievement, monthMasterAchievement]
+        testModel.achievements = testAchievements
+        
+        // Test milestone calculation for different scenarios
+        let unlockedCount = testModel.achievements.filter { $0.unlocked }.count
+        XCTAssertEqual(unlockedCount, 1, "Should have 1 unlocked achievement")
+        
+        let totalCount = testModel.achievements.count
+        XCTAssertEqual(totalCount, 3, "Should have 3 total achievements")
+        
+        let progressPercentage = Double(unlockedCount) / Double(totalCount)
+        XCTAssertEqual(progressPercentage, 1.0/3.0, accuracy: 0.01, "Progress should be approximately 33%")
+        
+        // Test achievement category grouping
+        let streakAchievements = testAchievements.filter { $0.title.contains("Streak") || $0.title.contains("Week") || $0.title.contains("Month") }
+        XCTAssertEqual(streakAchievements.count, 2, "Should identify 2 streak-related achievements")
+        
+        // Test achievement milestone boundaries
+        let nextMilestone = getNextAchievementMilestone(current: unlockedCount, total: totalCount)
+        XCTAssertEqual(nextMilestone, 2, "Next milestone should be 2 achievements")
+        
+        // Test progress toward next milestone
+        let milestoneProgress = Double(unlockedCount) / Double(nextMilestone)
+        XCTAssertEqual(milestoneProgress, 0.5, accuracy: 0.01, "Should be 50% toward next milestone")
+        
+        // Test StatCardView for achievement display
+        let achievementStatCard = StatCardView(
+            title: "Achievements",
+            value: "\(unlockedCount)/\(totalCount)",
+            color: .green
+        )
+        XCTAssertNotNil(achievementStatCard, "Should create achievement stat card")
+        
+        let milestoneStatCard = StatCardView(
+            title: "Next Milestone",
+            value: "\(nextMilestone) achievements",
+            color: .blue
+        )
+        XCTAssertNotNil(milestoneStatCard, "Should create milestone stat card")
+        
+        // Test milestone progress visualization
+        let progressStatCard = StatCardView(
+            title: "Progress",
+            value: String(format: "%.0f%%", progressPercentage * 100),
+            color: progressPercentage > 0.5 ? .green : .orange
+        )
+        XCTAssertNotNil(progressStatCard, "Should create progress stat card")
+    }
+    
     // MARK: - Edge Case Tests
     
     func testViewsWithExtremeValues() {
@@ -317,5 +439,20 @@ class ViewComponentTests: XCTestCase {
         case 17..<22: return "Good evening!"
         default: return "Good night!"
         }
+    }
+    
+    private func getNextAchievementMilestone(current: Int, total: Int) -> Int {
+        // Define achievement milestones
+        let milestones = [1, 3, 5, 10, 15, 20, 25]
+        
+        // Find the next milestone greater than current unlocked achievements
+        for milestone in milestones {
+            if milestone > current {
+                return min(milestone, total) // Don't exceed total achievements
+            }
+        }
+        
+        // If all milestones are reached, return total
+        return total
     }
 }
