@@ -134,7 +134,7 @@ struct HelpSupportView: View {
                                         showingMailComposer = true
                                     } else {
                                         // Fallback to mailto URL
-                                        if let url = URL(string: "mailto:support@gitstreak.app") {
+                                        if let url = URL(string: "mailto:\(AppConstants.supportEmail)") {
                                             UIApplication.shared.open(url)
                                         }
                                     }
@@ -157,7 +157,7 @@ struct HelpSupportView: View {
                                 
                                 // GitHub Issues
                                 Button(action: {
-                                    if let url = URL(string: "https://github.com/popand/gitstreak/issues") {
+                                    if let url = URL(string: AppConstants.githubIssuesURL) {
                                         UIApplication.shared.open(url)
                                     }
                                 }) {
@@ -183,9 +183,7 @@ struct HelpSupportView: View {
                     
                     // App Version Info
                     VStack(alignment: .center, spacing: 8) {
-                        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-                           let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
-                            Text("GitStreak v\(version) (\(build))")
+                        Text("GitStreak v\(AppConstants.appVersion) (\(AppConstants.buildNumber))")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -208,7 +206,7 @@ struct HelpSupportView: View {
         }
         .sheet(isPresented: $showingMailComposer) {
             MailComposerView(
-                recipients: ["support@gitstreak.app"],
+                recipients: [AppConstants.supportEmail],
                 subject: "GitStreak Support Request",
                 messageBody: generateSupportEmailBody()
             )
@@ -226,8 +224,8 @@ struct HelpSupportView: View {
     }
     
     private func generateSupportEmailBody() -> String {
-        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
-        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
+        let version = AppConstants.appVersion
+        let build = AppConstants.buildNumber
         let device = UIDevice.current.model
         let osVersion = UIDevice.current.systemVersion
         

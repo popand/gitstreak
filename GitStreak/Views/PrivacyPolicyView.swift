@@ -9,7 +9,7 @@ struct PrivacyPolicyView: View {
                 VStack(alignment: .leading, spacing: 24) {
                     Group {
                         Section {
-                            Text("Last Updated: \(Date().formatted(date: .long, time: .omitted))")
+                            Text("Last Updated: \(AppConstants.privacyPolicyLastUpdated)")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             

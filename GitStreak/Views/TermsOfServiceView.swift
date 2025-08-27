@@ -9,7 +9,7 @@ struct TermsOfServiceView: View {
                 VStack(alignment: .leading, spacing: 24) {
                     Group {
                         Section {
-                            Text("Effective Date: \(Date().formatted(date: .long, time: .omitted))")
+                            Text("Effective Date: \(AppConstants.termsOfServiceEffectiveDate)")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
