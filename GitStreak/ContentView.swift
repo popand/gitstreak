@@ -227,13 +227,13 @@ struct StatsView: View {
                         HStack(spacing: 16) {
                             StatCardView(
                                 title: "Most Active Day",
-                                value: dataModel.mostActiveWeekDay,
+                                value: dataModel.mostActiveWeekDay.isEmpty ? "N/A" : dataModel.mostActiveWeekDay,
                                 color: .blue
                             )
                             
                             StatCardView(
                                 title: "Daily Average", 
-                                value: String(format: "%.1f", dataModel.dailyCommitAverage),
+                                value: dataModel.dailyCommitAverage.isFinite ? String(format: "%.1f", dataModel.dailyCommitAverage) : "N/A",
                                 color: .green
                             )
                         }
@@ -242,8 +242,8 @@ struct StatsView: View {
                         HStack(spacing: 16) {
                             StatCardView(
                                 title: "Monthly Growth",
-                                value: dataModel.monthlyGrowthPercentage > 0 ? "+\(dataModel.monthlyGrowthPercentage)%" : "\(dataModel.monthlyGrowthPercentage)%",
-                                color: dataModel.monthlyGrowthIsPositive ? .purple : .gray
+                                value: dataModel.monthlyCommits.isEmpty ? "N/A" : (dataModel.monthlyGrowthPercentage > 0 ? "+\(dataModel.monthlyGrowthPercentage)%" : "\(dataModel.monthlyGrowthPercentage)%"),
+                                color: dataModel.monthlyCommits.isEmpty ? .gray : (dataModel.monthlyGrowthIsPositive ? .purple : .gray)
                             )
                             
                             // Invisible spacer card to maintain alignment
@@ -1022,6 +1022,9 @@ struct AchievementSummaryView: View {
         .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
 }
+
+
+// MARK: - Shared Components
 
 struct StatCardView: View {
     let title: String

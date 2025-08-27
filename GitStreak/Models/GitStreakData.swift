@@ -959,8 +959,12 @@ class GitStreakDataModel: ObservableObject {
         let dayMapping = ["Mon": "Monday", "Tue": "Tuesday", "Wed": "Wednesday", 
                          "Thu": "Thursday", "Fri": "Friday", "Sat": "Saturday", "Sun": "Sunday"]
         
-        let mostActiveDay = weeklyData.max { $0.commits < $1.commits }?.day ?? "Monday"
-        return dayMapping[mostActiveDay] ?? "Monday"
+        // Check if we have any actual commit data
+        let totalCommits = weeklyData.reduce(0) { $0 + $1.commits }
+        guard totalCommits > 0 else { return "" }
+        
+        let mostActiveDay = weeklyData.max { $0.commits < $1.commits }?.day ?? ""
+        return dayMapping[mostActiveDay] ?? ""
     }
     
     var dailyCommitAverage: Double {
@@ -975,10 +979,16 @@ class GitStreakDataModel: ObservableObject {
     }
     
     var monthlyGrowthPercentage: Int {
-        guard monthlyCommits.count >= 14 else { return 0 }
+        guard monthlyCommits.count >= 2 else { return 0 }
         
-        // Split month in half for comparison: recent half vs older half
+        // For now, since we have string time values, use array position as proxy for recency
+        // TODO: In production, implement actual date parsing from commit timestamps for more accurate growth calculation
+        let totalCommits = monthlyCommits.reduce(0) { $0 + $1.commits }
+        guard totalCommits > 0 else { return 0 }
+        
+        // Split by chronological position: recent half vs older half
         let midPoint = monthlyCommits.count / 2
+        // Note: Assuming monthlyCommits is ordered with most recent first
         let recentCommitCount = monthlyCommits.prefix(midPoint).reduce(0) { $0 + $1.commits }
         let olderCommitCount = monthlyCommits.dropFirst(midPoint).reduce(0) { $0 + $1.commits }
         
