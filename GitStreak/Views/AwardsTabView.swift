@@ -35,19 +35,43 @@ struct AwardsTabView: View {
                 
                 // Recent Achievements
                 if !dataModel.recentlyUnlockedAchievements.isEmpty {
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Recent Achievements")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(.primary)
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 12) {
-                                ForEach(dataModel.recentlyUnlockedAchievements.prefix(5)) { achievement in
-                                    CompactAchievementCardView(achievement: achievement)
-                                }
+                    VStack(spacing: 0) {
+                        // Recent Achievements Header
+                        HStack(spacing: 12) {
+                            // Icon with circular background
+                            ZStack {
+                                Circle()
+                                    .fill(Color(.systemGray5))
+                                    .frame(width: 40, height: 40)
+                                
+                                Image(systemName: "clock.arrow.circlepath")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .foregroundColor(.blue)
                             }
-                            .padding(.horizontal, 24)
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Recent Achievements")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                
+                                Text("\(dataModel.recentlyUnlockedAchievements.count) recently unlocked")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
                         }
+                        .padding(16)
+                        .background(Color(.systemBackground))
+                        .cornerRadius(12)
+                        
+                        // Recent Achievement Cards (matching expanded category structure)
+                        VStack(spacing: 8) {
+                            ForEach(dataModel.recentlyUnlockedAchievements.prefix(5)) { achievement in
+                                SimpleAchievementCardView(achievement: achievement)
+                            }
+                        }
+                        .padding(.top, 8)
                     }
                 }
             }
@@ -256,45 +280,3 @@ struct ProgressBarView: View {
     }
 }
 
-struct CompactAchievementCardView: View {
-    let achievement: Achievement
-    
-    var body: some View {
-        VStack(spacing: 8) {
-            Text(achievement.icon)
-                .font(.title)
-            
-            VStack(spacing: 2) {
-                Text(achievement.title)
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(.primary)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                
-                Text("Unlocked")
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundColor(.green)
-            }
-        }
-        .frame(width: 100, height: 80)
-        .padding(8)
-        .background(Color(.systemBackground))
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color(red: 0.2, green: 0.8, blue: 0.4),
-                            Color(red: 0.3, green: 0.5, blue: 0.9),
-                            Color(red: 0.6, green: 0.3, blue: 0.9)
-                        ]),
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    ),
-                    lineWidth: 2
-                )
-        )
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
-    }
-}

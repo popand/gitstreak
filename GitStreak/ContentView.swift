@@ -16,8 +16,6 @@ struct ContentView: View {
                     AwardsTabView(dataModel: dataModel)
                 } else if selectedTab == 2 {
                     StatsView(dataModel: dataModel)
-                } else {
-                    SocialView(dataModel: dataModel)
                 }
                 
                 TabBarView(selectedTab: $selectedTab)
@@ -113,16 +111,18 @@ struct HomeView: View {
                 }
                 
                 // Achievements Section
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Achievements")
-                        .font(.system(size: 15, weight: .semibold))
-                        .padding(.horizontal, 20)
-                    
-                    AchievementsView(achievements: dataModel.achievements)
-                        .padding(.horizontal, 20)
+                if !dataModel.achievements.filter({ $0.unlocked }).isEmpty {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Achievements")
+                            .font(.system(size: 15, weight: .semibold))
+                            .padding(.horizontal, 20)
+                        
+                        AchievementsView(achievements: dataModel.achievements.filter { $0.unlocked })
+                            .padding(.horizontal, 20)
+                    }
                 }
-                .padding(.bottom, 20)
             }
+            .padding(.bottom, 20)
         }
         .sheet(isPresented: $showSettings) {
             SettingsView(dataModel: dataModel)
@@ -261,27 +261,6 @@ struct StatsView: View {
         }
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Statistics")
-    }
-}
-
-struct SocialView: View {
-    @ObservedObject var dataModel: GitStreakDataModel
-    
-    var body: some View {
-        VStack {
-            Text("Social")
-                .font(.title2)
-                .fontWeight(.bold)
-                .padding()
-            
-            Spacer()
-            
-            Text("Coming Soon")
-                .font(.headline)
-                .foregroundColor(.secondary)
-            
-            Spacer()
-        }
     }
 }
 
