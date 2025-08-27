@@ -47,12 +47,6 @@ struct HomeView: View {
                     Spacer()
                     
                     HStack(spacing: 12) {
-                        Button(action: {}) {
-                            Image(systemName: "bell")
-                                .font(.title3)
-                                .foregroundColor(.gray)
-                        }
-                        
                         Button(action: {
                             showSettings = true
                         }) {
