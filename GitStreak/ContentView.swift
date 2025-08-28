@@ -293,6 +293,9 @@ struct SettingsView: View {
     @State private var isAuthenticating = false
     @State private var showError = false
     @State private var errorMessage = ""
+    @State private var showingPrivacyPolicy = false
+    @State private var showingTermsOfService = false
+    @State private var showingHelpSupport = false
     
     var body: some View {
         NavigationView {
@@ -307,6 +310,91 @@ struct SettingsView: View {
                         } else {
                             authenticationView
                         }
+                        
+                        // Legal & Support Section
+                        VStack(spacing: 12) {
+                            Text("Resources")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor(.primary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            VStack(spacing: 0) {
+                                // Help & Support
+                                Button(action: { showingHelpSupport = true }) {
+                                    HStack {
+                                        Image(systemName: "questionmark.circle.fill")
+                                            .font(.system(size: 20))
+                                            .foregroundColor(.blue)
+                                            .frame(width: 28)
+                                        
+                                        Text("Help & Support")
+                                            .font(.system(size: 14))
+                                            .foregroundColor(.primary)
+                                        
+                                        Spacer()
+                                        
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 12, weight: .semibold))
+                                            .foregroundColor(.secondary.opacity(0.5))
+                                    }
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 14)
+                                }
+                                
+                                Divider()
+                                    .padding(.leading, 60)
+                                
+                                // Privacy Policy
+                                Button(action: { showingPrivacyPolicy = true }) {
+                                    HStack {
+                                        Image(systemName: "lock.shield.fill")
+                                            .font(.system(size: 20))
+                                            .foregroundColor(.green)
+                                            .frame(width: 28)
+                                        
+                                        Text("Privacy Policy")
+                                            .font(.system(size: 14))
+                                            .foregroundColor(.primary)
+                                        
+                                        Spacer()
+                                        
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 12, weight: .semibold))
+                                            .foregroundColor(.secondary.opacity(0.5))
+                                    }
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 14)
+                                }
+                                
+                                Divider()
+                                    .padding(.leading, 60)
+                                
+                                // Terms of Service
+                                Button(action: { showingTermsOfService = true }) {
+                                    HStack {
+                                        Image(systemName: "doc.text.fill")
+                                            .font(.system(size: 20))
+                                            .foregroundColor(.purple)
+                                            .frame(width: 28)
+                                        
+                                        Text("Terms of Service")
+                                            .font(.system(size: 14))
+                                            .foregroundColor(.primary)
+                                        
+                                        Spacer()
+                                        
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 12, weight: .semibold))
+                                            .foregroundColor(.secondary.opacity(0.5))
+                                    }
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 14)
+                                }
+                            }
+                            .background(Color(.systemBackground))
+                            .cornerRadius(12)
+                        }
+                        .padding(.top, 8)
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 16)
@@ -317,11 +405,11 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { dismiss() }) {
-                        Text("Done")
-                            .fontWeight(.semibold)
-                            .foregroundColor(.blue)
+                    Button("Done") {
+                        dismiss()
                     }
+                    .fontWeight(.semibold)
+                    .foregroundColor(.blue)
                 }
             }
         }
@@ -329,6 +417,15 @@ struct SettingsView: View {
             Button("OK") { }
         } message: {
             Text(errorMessage)
+        }
+        .sheet(isPresented: $showingPrivacyPolicy) {
+            PrivacyPolicyView()
+        }
+        .sheet(isPresented: $showingTermsOfService) {
+            TermsOfServiceView()
+        }
+        .sheet(isPresented: $showingHelpSupport) {
+            HelpSupportView()
         }
     }
     
@@ -593,7 +690,7 @@ struct SettingsView: View {
                 }
                 
                 Button(action: {
-                    if let url = URL(string: "https://github.com/settings/tokens/new?scopes=repo,user&description=GitStreak%20App") {
+                    if let url = URL(string: AppConstants.githubTokenGenerationURL) {
                         UIApplication.shared.open(url)
                     }
                 }) {
