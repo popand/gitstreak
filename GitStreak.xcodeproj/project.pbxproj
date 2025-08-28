@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		1A2B3C4D5E6F7G8H9I0J1K2L /* GitStreakApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K2M /* GitStreakApp.swift */; };
 		1A2B3C4D5E6F7G8H9I0J1K2N /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K2O /* ContentView.swift */; };
+		2F37473F4A3E447A94D5BD80 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29553B8F01694BF2B7DC3039 /* AppConstants.swift */; };
+		7B17ACAC872B4E6882454524 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBE44C1AF9E4EDFB678D375 /* PrivacyPolicyView.swift */; };
+		7DAD5D8097AD443E8574373B /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992FC569EA64D0AB98A86A8 /* TermsOfServiceView.swift */; };
+		37824FFD043A4C92A86BE006 /* HelpSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDEDA15ABB534688910091EF /* HelpSupportView.swift */; };
 		1A2B3C4D5E6F7G8H9I0J1K2P /* GitStreakData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K2Q /* GitStreakData.swift */; };
 		1A2B3C4D5E6F7G8H9I0J1K2R /* StreakCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K2S /* StreakCardView.swift */; };
 		1A2B3C4D5E6F7G8H9I0J1K2T /* LevelProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K2U /* LevelProgressView.swift */; };
@@ -34,6 +38,10 @@
 /* Begin PBXFileReference section */
 		1A2B3C4D5E6F7G8H9I0J1K2M /* GitStreakApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitStreakApp.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K2O /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		29553B8F01694BF2B7DC3039 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		2BBE44C1AF9E4EDFB678D375 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
+		A992FC569EA64D0AB98A86A8 /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
+		FDEDA15ABB534688910091EF /* HelpSupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpSupportView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K2Q /* GitStreakData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitStreakData.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K2S /* StreakCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakCardView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K2U /* LevelProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelProgressView.swift; sourceTree = "<group>"; };
@@ -84,6 +92,7 @@
 			children = (
 				1A2B3C4D5E6F7G8H9I0J1K2M /* GitStreakApp.swift */,
 				1A2B3C4D5E6F7G8H9I0J1K2O /* ContentView.swift */,
+				29553B8F01694BF2B7DC3039 /* AppConstants.swift */,
 				1A2B3C4D5E6F7G8H9I0J1K42 /* Models */,
 				1A2B3C4D5E6F7G8H9I0J1K43 /* Views */,
 				1A2B3C4D5E6F7G8H9I0J1K34 /* Assets.xcassets */,
@@ -119,6 +128,9 @@
 				1A2B3C4D5E6F7G8H9I0J1K30 /* AchievementsView.swift */,
 				1A2B3C4D5E6F7G8H9I0J1K3B /* AllCommitsView.swift */,
 				1A2B3C4D5E6F7G8H9I0J1K32 /* TabBarView.swift */,
+				2BBE44C1AF9E4EDFB678D375 /* PrivacyPolicyView.swift */,
+				A992FC569EA64D0AB98A86A8 /* TermsOfServiceView.swift */,
+				FDEDA15ABB534688910091EF /* HelpSupportView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -237,6 +249,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A2B3C4D5E6F7G8H9I0J1K2N /* ContentView.swift in Sources */,
+				2F37473F4A3E447A94D5BD80 /* AppConstants.swift in Sources */,
+				7B17ACAC872B4E6882454524 /* PrivacyPolicyView.swift in Sources */,
+				7DAD5D8097AD443E8574373B /* TermsOfServiceView.swift in Sources */,
+				37824FFD043A4C92A86BE006 /* HelpSupportView.swift in Sources */,
 				1A2B3C4D5E6F7G8H9I0J1K2P /* GitStreakData.swift in Sources */,
 				1A2B3C4D5E6F7G8H9I0J1K2R /* StreakCardView.swift in Sources */,
 				1A2B3C4D5E6F7G8H9I0J1K2T /* LevelProgressView.swift in Sources */,

@@ -6,7 +6,7 @@ struct AppConstants {
     static let termsOfServiceEffectiveDate = "August 27, 2025"
     
     // MARK: - Contact Information
-    static let supportEmail = "support@gitstreak.app"
+    static let supportEmail = "gitstreakapp@gmail.com"
     
     // MARK: - External URLs
     static let githubIssuesURL = "https://github.com/popand/gitstreak/issues"

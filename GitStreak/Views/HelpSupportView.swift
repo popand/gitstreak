@@ -184,9 +184,8 @@ struct HelpSupportView: View {
                     // App Version Info
                     VStack(alignment: .center, spacing: 8) {
                         Text("GitStreak v\(AppConstants.appVersion) (\(AppConstants.buildNumber))")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.top, 20)
@@ -231,7 +230,7 @@ struct HelpSupportView: View {
         
         return """
         
-        
+
         ---
         Please describe your issue above this line
         ---
