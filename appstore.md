@@ -1,32 +1,7 @@
 # App Store Submission Content
 
-## General Information
-
-### Bundle ID
-com.gitstreak.app
-
-### SKU
-com.gitstreak.app
-
-### Apple ID
-6751604155
-
-### Primary Language
-English (Canada)
-
-### Content Rights
-This app does not contain, show, or access third-party content.
-
-### License Agreement
-Apple's Standard License Agreement
-
-## App Store Server Notifications
-Not configured (No in-app purchases)
-
-**Note:** GitStreak does not include any in-app purchases, so App Store Server Notifications are not required.
-
 ## Promotional Text
-Track your GitHub contributions and build unstoppable coding streaks! Connect your GitHub account to monitor daily commits, earn achievements, and level up your developer journey.
+Track your GitHub commits, build streaks, and unlock achievements! Stay motivated and level up your coding with GitStreak.
 
 ## Description
 GitStreak transforms your GitHub activity into an engaging experience that motivates consistent coding habits. Whether you're a seasoned developer or just starting your programming journey, GitStreak helps you maintain momentum and celebrate your progress.
@@ -58,17 +33,12 @@ GitStreak respects your privacy - all data comes directly from GitHub's public A
 Start your streak today and join thousands of developers who've made coding a daily habit!
 
 ## Keywords
-github, streak, commits, coding, developer, programming, git, contributions, tracker, productivity, habits, achievements, statistics, activity, monitor, progress, visualization, gamification, motivation, daily
-
-## Localizable Information
-
-### Name
-GitStreak
-
-### Subtitle
-Build unstoppable coding habits
+github, streak, commits, coding, developer, tracker, productivity, achievements, motivation
 
 ## Additional App Store Fields
+
+### Subtitle
+Track your GitHub streaks
 
 ### App Category
 Primary: Developer Tools
@@ -76,32 +46,6 @@ Secondary: Productivity
 
 ### Age Rating
 4+ (No objectionable content)
-
-**Age Rating Questionnaire Answers:**
-
-**Step 1: Features**
-
-*In-App Controls:*
-- Parental Controls: NO
-- Age Assurance: NO
-
-*Capabilities:*
-- Unrestricted Web Access: NO
-- User-Generated Content: NO
-- Messaging and Chat: NO
-
-**Step 2-7: Content Categories**
-- Violence (Cartoon/Fantasy): None
-- Violence (Realistic): None
-- Sexual Content or Nudity: None
-- Profanity or Crude Humor: None
-- Alcohol, Tobacco, or Drug Use: None
-- Mature/Suggestive Themes: None
-- Medical/Treatment Information: None
-- Gambling: None
-- Horror/Fear Themes: None
-- Contests: None
-- Unrestricted Internet Access: NO
 
 ### Copyright
 © 2024 Andrei Pop
@@ -113,13 +57,10 @@ https://github.com/popand/gitstreak/issues
 https://thegitstreak.app/
 
 ### Privacy Policy URL
-https://thegitstreak.app/privacy
-
-### User Privacy Choices URL (Optional)
-https://thegitstreak.app/privacy#choices
+https://gitstreak.app/privacy
 
 ### Terms of Use URL
-https://thegitstreak.app/terms
+https://gitstreak.app/terms
 
 ## Version Release Notes (1.0)
 Welcome to GitStreak! 
