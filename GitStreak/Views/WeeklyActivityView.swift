@@ -5,7 +5,7 @@ struct WeeklyActivityView: View {
     let totalCommits: Int
     
     var maxCommits: Int {
-        weeklyData.map { $0.commits }.max() ?? 1
+        max(weeklyData.map { $0.commits }.max() ?? 1, 1)
     }
     
     var body: some View {
@@ -26,7 +26,7 @@ struct WeeklyActivityView: View {
                                 Color(.systemGray5)
                             )
                             .frame(height: max(
-                                CGFloat(day.commits) / CGFloat(maxCommits) * 96, // Use fixed height calculation
+                                day.commits > 0 ? CGFloat(day.commits) / CGFloat(maxCommits) * 96 : 0,
                                 8
                             ))
                         
