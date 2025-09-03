@@ -9,10 +9,6 @@
 /* Begin PBXBuildFile section */
 		1A2B3C4D5E6F7G8H9I0J1K2L /* GitStreakApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K2M /* GitStreakApp.swift */; };
 		1A2B3C4D5E6F7G8H9I0J1K2N /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K2O /* ContentView.swift */; };
-		2F37473F4A3E447A94D5BD80 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29553B8F01694BF2B7DC3039 /* AppConstants.swift */; };
-		7B17ACAC872B4E6882454524 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBE44C1AF9E4EDFB678D375 /* PrivacyPolicyView.swift */; };
-		7DAD5D8097AD443E8574373B /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992FC569EA64D0AB98A86A8 /* TermsOfServiceView.swift */; };
-		37824FFD043A4C92A86BE006 /* HelpSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDEDA15ABB534688910091EF /* HelpSupportView.swift */; };
 		1A2B3C4D5E6F7G8H9I0J1K2P /* GitStreakData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K2Q /* GitStreakData.swift */; };
 		1A2B3C4D5E6F7G8H9I0J1K2R /* StreakCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K2S /* StreakCardView.swift */; };
 		1A2B3C4D5E6F7G8H9I0J1K2T /* LevelProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K2U /* LevelProgressView.swift */; };
@@ -23,6 +19,10 @@
 		1A2B3C4D5E6F7G8H9I0J1K33 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K34 /* Assets.xcassets */; };
 		1A2B3C4D5E6F7G8H9I0J1K35 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K36 /* Preview Assets.xcassets */; };
 		1A2B3C4D5E6F7G8H9I0J1K3A /* AllCommitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7G8H9I0J1K3B /* AllCommitsView.swift */; };
+		2F37473F4A3E447A94D5BD80 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29553B8F01694BF2B7DC3039 /* AppConstants.swift */; };
+		37824FFD043A4C92A86BE006 /* HelpSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDEDA15ABB534688910091EF /* HelpSupportView.swift */; };
+		7B17ACAC872B4E6882454524 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBE44C1AF9E4EDFB678D375 /* PrivacyPolicyView.swift */; };
+		7DAD5D8097AD443E8574373B /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992FC569EA64D0AB98A86A8 /* TermsOfServiceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,10 +38,6 @@
 /* Begin PBXFileReference section */
 		1A2B3C4D5E6F7G8H9I0J1K2M /* GitStreakApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitStreakApp.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K2O /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		29553B8F01694BF2B7DC3039 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
-		2BBE44C1AF9E4EDFB678D375 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
-		A992FC569EA64D0AB98A86A8 /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
-		FDEDA15ABB534688910091EF /* HelpSupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpSupportView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K2Q /* GitStreakData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitStreakData.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K2S /* StreakCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakCardView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K2U /* LevelProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelProgressView.swift; sourceTree = "<group>"; };
@@ -53,7 +49,11 @@
 		1A2B3C4D5E6F7G8H9I0J1K36 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7G8H9I0J1K37 /* GitStreak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitStreak.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2B3C4D5E6F7G8H9I0J1K3B /* AllCommitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCommitsView.swift; sourceTree = "<group>"; };
+		29553B8F01694BF2B7DC3039 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		2BBE44C1AF9E4EDFB678D375 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
+		A992FC569EA64D0AB98A86A8 /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
 		C99331832E3955BB00D19848 /* GitStreakTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GitStreakTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDEDA15ABB534688910091EF /* HelpSupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpSupportView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -194,7 +194,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					1A2B3C4D5E6F7G8H9I0J1K45 = {
 						CreatedOnToolsVersion = 15.4;
@@ -318,6 +318,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 389Y5DY6GV;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -381,6 +382,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 389Y5DY6GV;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -410,9 +412,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"GitStreak/Preview Content\"";
-				DEVELOPMENT_TEAM = 389Y5DY6GV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = GitStreak;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -438,9 +441,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"GitStreak/Preview Content\"";
-				DEVELOPMENT_TEAM = 389Y5DY6GV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = GitStreak;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -464,7 +468,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
-				DEVELOPMENT_TEAM = 389Y5DY6GV;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
@@ -483,7 +486,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
-				DEVELOPMENT_TEAM = 389Y5DY6GV;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
